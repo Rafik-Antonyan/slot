@@ -1,9 +1,23 @@
 import React from 'react';
 import { AutoBonus, BuyBonus, MenuButton, Spin, SpinAgain } from 'assets/png';
 import { Bet } from 'components/atoms/bet/Bet';
+import { ESlotActions } from 'utils/types/slotActions';
 import styles from './slotButtons.module.scss';
 
-export const SlotButtons: React.FC = () => {
+interface ISlotButtons{
+    setAction: React.Dispatch<React.SetStateAction<ESlotActions>>
+}
+
+export const SlotButtons: React.FC<ISlotButtons> = ({setAction}) => {
+    const onClickButton = (value:ESlotActions) => {
+        if(value === ESlotActions.PLAY){
+            setAction(value)
+            setTimeout(() => {
+                setAction(ESlotActions.PAUSE)
+            },1000)
+        }
+    }
+
     return (
         <div className={styles.slotButtons}>
             <div className={styles.slotButtons_bonus}>
@@ -24,7 +38,7 @@ export const SlotButtons: React.FC = () => {
                 </div>
                 <div className={styles.slotButtons_play_spin}>
                     <Bet />
-                    <img src={Spin} alt='spin' className={styles.spin}/>
+                    <img src={Spin} alt='spin' className={styles.spin} onClick={() => onClickButton(ESlotActions.PLAY)}/>
                     <img src={SpinAgain} alt='spin_againt' />
                 </div>
             </div>
