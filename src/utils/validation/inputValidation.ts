@@ -1,0 +1,1 @@
+export const checkValidation = ({ value, regexp }: { value: string | number; regexp: string }): boolean => new RegExp(regexp).test(value as string);

@@ -1,0 +1,65 @@
+@import "./../../../styles/colors.scss";
+
+.slotButtons{
+    height: 110px;
+    width: 100%;
+    display: flex;
+    gap: 30px;
+    padding-top: 16px;
+
+    img{
+        width: 94px;
+        height: 94px;
+        cursor: pointer;
+
+        &:hover{
+            filter: grayscale(60%);
+        }
+    }
+
+    &_bonus{
+        display: flex;
+        gap: 15px;
+    }
+
+    &_play{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+
+        &_balance{
+            display: flex;
+            gap: 50px;
+            color: $white;
+
+            &>div{
+                display: flex;
+                gap: 4px;
+                flex-direction: column;
+
+                p{
+                    font-size: 22px;
+                    line-height: 28px;
+                    font-weight: 600;
+                }
+
+                span{
+                    font-size: 32px;
+                    font-weight: bold;
+                    line-height: 28px;
+                }
+            }
+        }
+
+        &_spin{
+            display: flex;
+            align-items: center;
+
+            &>.spin{
+                width: 146px;
+                height: 146px;
+            }
+        }
+    }
+}

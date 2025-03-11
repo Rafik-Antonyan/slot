@@ -1,66 +1,61 @@
 {
     "env": {
-      "jest/globals": true
+        "jest/globals": true
     },
     "extends": [
-      "plugin:@typescript-eslint/recommended",
-      "plugin:react-hooks/recommended",
-      "plugin:jest/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:jest/recommended",
+        "eslint:recommended"
     ],
     "rules": {
-      "react/display-name": "off",
-      "@next/next/no-img-element": "off",
-      "react/no-unescaped-entities": "off",
-      "import/no-anonymous-default-export": "off",
-      "@typescript-eslint/no-unused-vars": "error",
-      "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-non-null-assertion": "off",
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-      "comma-dangle": ["error", "always-multiline"],
-      // add new line above comment
-      "no-console": ["warn", { "allow": ["warn", "error"] }],
-      "lines-around-comment": [
-        "error",
-        {
-          "beforeLineComment": true,
-          "beforeBlockComment": true,
-          "allowBlockStart": true,
-          "allowClassStart": true,
-          "allowObjectStart": true,
-          "allowArrayStart": true
-        }
-      ],
-      // add new line above return
-      "newline-before-return": "error",
-      // add new line below import
-      "import/newline-after-import": [
-        "error",
-        {
-          "count": 1
-        }
-      ],
-      "@typescript-eslint/ban-types": [
-        "error",
-        {
-          "extendDefaults": true,
-          "types": {
-            "{}": false
-          }
-        }
-      ]
+        "react/display-name": "off",
+        "@next/next/no-img-element": "off",
+        "react/no-unescaped-entities": "off",
+        "import/no-anonymous-default-export": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "comma-dangle": ["error", "always-multiline"],
+        "@typescript-eslint/no-unused-expressions": ["error", { "allowShortCircuit": true }],
+        // add new line above comment
+        "no-console": ["warn", { "allow": ["warn", "error"] }],
+        "lines-around-comment": [
+            "error",
+            {
+                "beforeLineComment": true,
+                "beforeBlockComment": true,
+                "allowBlockStart": true,
+                "allowClassStart": true,
+                "allowObjectStart": true,
+                "allowArrayStart": true
+            }
+        ],
+        // add new line above return
+        "newline-before-return": "error",
+        // add new line below import
+        "import/newline-after-import": [
+            "error",
+            {
+                "count": 1
+            }
+        ],
+        "@typescript-eslint/ban-types": ["warn", {}]
     },
-    "plugins": ["import", "react-hooks", "jest"],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["import", "react-hooks", "jest", "@typescript-eslint"],
     "settings": {
-      "import/parsers": {
-        "@typescript-eslint/parser": [".ts", ".tsx"]
-      },
-      "import/resolver": {
-        "typescript": {
-          "alwaysTryTypes": true,
-          "project": ["./tsconfig.json"]
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
+        },
+        "import/resolver": {
+            "typescript": {
+                "alwaysTryTypes": true,
+                "project": ["./tsconfig.json"]
+            }
         }
-      }
     }
-  }
+}

@@ -1,0 +1,45 @@
+@import "./../../../styles/colors.scss";
+
+.bet {
+    display: flex;
+    width: 273px;
+    justify-content: space-between;
+    padding: 16px 40px;
+    border-radius: 80px;
+    background-color: #130e14c4;
+
+    &_values {
+        display: flex;
+        gap: 4px;
+        flex-direction: column;
+        color: $white;
+        justify-content: center;
+
+        p {
+            font-size: 22px;
+            line-height: 28px;
+            font-weight: 600;
+        }
+
+        span {
+            font-size: 32px;
+            font-weight: bold;
+            line-height: 28px;
+        }
+    }
+
+    &_arrows{
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+
+        img{
+            height: 36px !important;
+            width: 52px !important;
+
+            &:last-child{
+                transform: rotate(180deg);
+            }
+        }
+    }
+}

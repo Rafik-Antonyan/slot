@@ -5,8 +5,6 @@ import { RoutesWrapper } from 'routes';
 
 import { AxiosInterceptor } from 'config/axiosApi';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 const App: React.FC = () => {
     return (
         <BrowserRouter>
