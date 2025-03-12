@@ -16,7 +16,9 @@ export const Slot: React.FC = () => {
               videoRef.current.play();
           }
           hasPausedOnce.current = true;
-      }
+      }else if(action === ESlotActions.INCREMENT){
+        //add logic here
+        }
   }, [action]);
 
   return (

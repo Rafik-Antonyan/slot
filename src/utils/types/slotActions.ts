@@ -1,4 +1,6 @@
 export enum ESlotActions {
     PLAY = 'play',
-    PAUSE = 'pause'
+    PAUSE = 'pause',
+    INCREMENT = 'increment',
+    DECREMENT = 'decrement'
 }

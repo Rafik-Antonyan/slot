@@ -33,6 +33,7 @@ export const SlotView: React.FC<ISlotView> = ({ action }) => {
         for (let rowIndex = 0; rowIndex < 4; rowIndex++) {
           reel.push(initialData[rowIndex][colIndex])
         }
+
         return reel
       })
 
@@ -108,6 +109,7 @@ export const SlotView: React.FC<ISlotView> = ({ action }) => {
           setSpinningColumns((prev) => {
             const updated = [...prev]
             updated[i] = false
+
             return updated
           })
 
