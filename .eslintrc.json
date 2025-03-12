@@ -43,7 +43,7 @@
                 "count": 1
             }
         ],
-        "@typescript-eslint/ban-types": ["warn", {}]
+        "@typescript-eslint/ban-types": ["off", {}]
     },
     "parser": "@typescript-eslint/parser",
     "plugins": ["import", "react-hooks", "jest", "@typescript-eslint"],
