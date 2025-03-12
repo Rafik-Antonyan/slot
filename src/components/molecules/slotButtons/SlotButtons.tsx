@@ -2,21 +2,28 @@ import React from 'react';
 import { AutoBonus, BuyBonus, MenuButton, Spin, SpinAgain } from 'assets/png';
 import { Bet } from 'components/atoms/bet/Bet';
 import { ESlotActions } from 'utils/types/slotActions';
+import { ISlotData } from 'utils/types/slot';
 import styles from './slotButtons.module.scss';
 
-interface ISlotButtons{
-    setAction: React.Dispatch<React.SetStateAction<ESlotActions>>
+interface ISlotButtons {
+    slotData: ISlotData;
+    setAction: React.Dispatch<React.SetStateAction<ESlotActions>>;
+    setSlotData: React.Dispatch<React.SetStateAction<ISlotData>>;
 }
 
-export const SlotButtons: React.FC<ISlotButtons> = ({setAction}) => {
-    const onClickButton = (value:ESlotActions) => {
-        if(value === ESlotActions.PLAY){
-            setAction(value)
+export const SlotButtons: React.FC<ISlotButtons> = ({ setAction, slotData, setSlotData }) => {
+    const onClickButton = (value: ESlotActions) => {
+        if (value === ESlotActions.PLAY) {
+            setAction(value);
+            setSlotData((prev) => ({
+                ...prev,
+                balance: prev.balance - slotData.betValue,
+            }));
             setTimeout(() => {
-                setAction(ESlotActions.PAUSE)
-            },1000)
+                setAction(ESlotActions.PAUSE);
+            }, 1000);
         }
-    }
+    };
 
     return (
         <div className={styles.slotButtons}>
@@ -29,7 +36,7 @@ export const SlotButtons: React.FC<ISlotButtons> = ({setAction}) => {
                 <div className={styles.slotButtons_play_balance}>
                     <div>
                         <p>BALANCE</p>
-                        <span>€4000.00</span>
+                        <span>€{slotData.balance}</span>
                     </div>
                     <div>
                         <p>WIN</p>
@@ -37,8 +44,13 @@ export const SlotButtons: React.FC<ISlotButtons> = ({setAction}) => {
                     </div>
                 </div>
                 <div className={styles.slotButtons_play_spin}>
-                    <Bet setAction={setAction}/>
-                    <img src={Spin} alt='spin' className={styles.spin} onClick={() => onClickButton(ESlotActions.PLAY)}/>
+                    <Bet slotData={slotData} setSlotData={setSlotData} />
+                    <img
+                        src={Spin}
+                        alt='spin'
+                        className={styles.spin}
+                        onClick={() => onClickButton(ESlotActions.PLAY)}
+                    />
                     <img src={SpinAgain} alt='spin_againt' />
                 </div>
             </div>

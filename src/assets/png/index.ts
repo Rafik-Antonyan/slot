@@ -20,6 +20,8 @@ import Spin from './spin.png';
 import SpinAgain from './spin_again.png';
 import Wild from './wild.png';
 import Women from './women.png';
+import GameDescription from './game_description.png';
+import LoadingCharacter from './loading_character.png';
 
 export {
     BgImage,
@@ -44,4 +46,6 @@ export {
     SpinAgain,
     Wild,
     Women,
+    GameDescription,
+    LoadingCharacter,
 };
