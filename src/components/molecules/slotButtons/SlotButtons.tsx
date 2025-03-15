@@ -29,7 +29,7 @@ export const SlotButtons: React.FC<ISlotButtons> = ({ setAction, slotData, setSl
         <div className={styles.slotButtons}>
             <div className={styles.slotButtons_bonus}>
                 <img src={AutoBonus} alt='auto_bonus' />
-                <img src={BuyBonus} alt='buy_bonus' />
+                <img src={BuyBonus} alt='buy_bonus' onClick={() => setAction(ESlotActions.BUY_BONUS)}/>
                 <img src={MenuButton} alt='menu' />
             </div>
             <div className={styles.slotButtons_play}>

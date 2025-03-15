@@ -1,16 +1,25 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import styles from './button.module.scss';
 
 interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    label: string | ReactNode;
     color?: 'yellow' | 'black' | 'white' | 'transparent';
     size?: 'small' | 'big';
 }
 
-export const Button: React.FC<IButton> = ({ color = 'black', label, size = 'small', onClick, ...rest }) => {
+export const Button: React.FC<IButton> = ({
+    color = 'black',
+    size = 'small',
+    onClick,
+    children,
+    ...rest
+}) => {
     return (
-        <button onClick={onClick} className={`${styles.button} ${styles[color]} ${styles[size]}`} {...rest}>
-            {label}
+        <button
+            onClick={onClick}
+            className={`${styles.button} ${styles[color]} ${styles[size]}`}
+            {...rest}
+        >
+            {children}
         </button>
     );
 };

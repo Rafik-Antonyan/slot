@@ -9,6 +9,7 @@ export const useOutsideClick = (ref: RefObject<HTMLElement | null>, callback: ()
         };
 
         document.addEventListener('mousedown', handleClickOutside);
+        
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };

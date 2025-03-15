@@ -22,6 +22,9 @@ import Wild from './wild.png';
 import Women from './women.png';
 import GameDescription from './game_description.png';
 import LoadingCharacter from './loading_character.png';
+import CleanBonusChair from './clean_bonus.png';
+import CleanGoldenChip from './clean_golden_chip.png';
+import CleanRaid from './clean_raid.png';
 
 export {
     BgImage,
@@ -48,4 +51,7 @@ export {
     Women,
     GameDescription,
     LoadingCharacter,
+    CleanBonusChair,
+    CleanGoldenChip,
+    CleanRaid,
 };

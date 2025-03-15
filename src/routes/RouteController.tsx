@@ -9,9 +9,10 @@ interface IRouteControllerProps {
 
 export const RouteController: React.FC<IRouteControllerProps> = ({
     children,
-    isPrivate,
-    path,
-    hasLayout,
+    
+    // isPrivate,
+    // path,
+    // hasLayout,
 }) => {
     return <>{children}</>;
 
