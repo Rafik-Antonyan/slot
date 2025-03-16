@@ -1,0 +1,54 @@
+.bonusRoundButtons{
+    height: 110px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1034px;
+    background-color: rgba(0, 0, 0, 0.541);
+
+    &_left{
+        display: flex;
+        align-items: center;
+        height: 100%;
+        img{
+            height: 94px;
+            width: 94px;
+            margin-bottom: -6px;
+
+            &:hover{
+                filter: grayscale(60%);
+                cursor: pointer;
+            }
+        }
+    }
+
+    &_right{
+        display: flex;
+        margin-right: 10px;
+        border-radius: 5px;
+        .infoBlock{
+            background-color: #1a161a;
+            padding: 8px 10px;
+        }   
+    }
+
+    .infoBlock{
+        display: flex;
+        gap: 4px;
+        flex-direction: column;
+        width: 150px;
+        color: white;
+
+        p{
+            font-size: 22px;
+            line-height: 28px;
+            font-weight: 600;
+        }
+
+        span{
+            font-size: 32px;
+            font-weight: bold;
+            line-height: 28px;
+        }
+    }
+}

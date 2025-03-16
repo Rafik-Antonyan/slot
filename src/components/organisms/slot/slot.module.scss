@@ -1,4 +1,4 @@
-.slot{
+.slot {
     height: 100vh;
     padding: 34px 0;
     width: calc(100vw - 584px);
@@ -7,11 +7,11 @@
     margin-left: 420px;
     margin-right: 164px;
 
-    &_video{
+    &_video {
         height: 100vh;
-    width: 100vw;
-    position: absolute;
-    left: 0;
-    top: 0;
+        width: 100vw;
+        position: absolute;
+        left: 0;
+        top: 0;
     }
 }

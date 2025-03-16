@@ -3,3 +3,9 @@ export enum ESlotActions {
     PAUSE = 'pause',
     BUY_BONUS = 'buy bonus'
 }
+
+export enum EBonuses{
+    GOLDEN = 'golden',
+    INTERROGATION = 'interrogation',
+    RAID = 'raid',
+}

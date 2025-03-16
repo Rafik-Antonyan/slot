@@ -1,177 +1,201 @@
-"use client"
-
-import type React from "react"
-import { useEffect, useState, useRef } from "react"
-import { ClipGaming } from "assets/png"
-import { viewGenerator } from "utils/generators/viewGenerator"
-import { ESlotActions } from "utils/types/slotActions"
-import styles from "./slotView.module.scss"
+import type React from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { ClipGaming } from 'assets/png';
+import { viewGenerator } from 'utils/generators/viewGenerator';
+import { EBonuses, ESlotActions } from 'utils/types/slotActions';
+import styles from './slotView.module.scss';
 
 interface ISlotView {
-  action: ESlotActions
+    action?: ESlotActions;
+    selectedBonus?: EBonuses;
+    freeSpins?: number; 
+    setFreeSpins?: React.Dispatch<React.SetStateAction<number>>;
+    setTotalWin?: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const REEL_LENGTH = 20
+const REEL_LENGTH = 20;
 
-export const SlotView: React.FC<ISlotView> = ({ action }) => {
-  const [isSpinning, setIsSpinning] = useState<boolean>(false)
-  const [spinningColumns, setSpinningColumns] = useState<boolean[]>([false, false, false, false, false])
-  const spinTimeoutsRef = useRef<any[]>([])
-  const reelsRef = useRef<HTMLDivElement[]>([])
-  const [reels, setReels] = useState<string[][]>([])
+export const SlotView: React.FC<ISlotView> = ({ action, selectedBonus, freeSpins, setFreeSpins, setTotalWin }) => {
+    const [isSpinning, setIsSpinning] = useState<boolean>(false);
+    const [spinningColumns, setSpinningColumns] = useState<boolean[]>([false, false, false, false, false]);
+    const spinTimeoutsRef = useRef<any[]>([]);
+    const reelsRef = useRef<HTMLDivElement[]>([]);
+    const [reels, setReels] = useState<string[][]>([]);
 
-  // Initialize reels with the initial data
-  useEffect(() => {
-    // Generate initial data
-    const initialData = viewGenerator(4, 5)
+    // Add state for tracking free spins
+    const freeSpinTimeoutRef = useRef<any>(null);
 
-    // Create reels with just the visible symbols
-    const initialReels = Array(5)
-      .fill(0)
-      .map((_, colIndex) => {
-        const reel = []
-        for (let rowIndex = 0; rowIndex < 4; rowIndex++) {
-          reel.push(initialData[rowIndex][colIndex])
+    // Initialize reels with the initial data
+    useEffect(() => {
+      const initialData = viewGenerator(4, 5);
+
+      const initialReels = Array(5)
+        .fill(0)
+        .map((_, colIndex) => {
+          const reel = [];
+          for (let rowIndex = 0; rowIndex < 4; rowIndex++) {
+            reel.push(initialData[rowIndex][colIndex]);
+          }
+
+          return reel;
+        });
+
+      setReels(initialReels);
+    }, []);
+
+    // Clean up timeouts on unmount
+    useEffect(() => {
+      return () => {
+        spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
+        if (freeSpinTimeoutRef.current) {
+          clearTimeout(freeSpinTimeoutRef.current);
         }
+      };
+    }, []);
 
-        return reel
-      })
+    // Trigger next free spin when current spin completes
+    useEffect(() => {
+      if (freeSpins && freeSpins > 0 && !isSpinning) {
+        freeSpinTimeoutRef.current = setTimeout(() => {
+          handleSpin();
+          setFreeSpins!((prev) => prev - 1);
+        }, 1000); // 1 second delay between spins
+      }
+    }, [freeSpins, isSpinning]);
 
-    setReels(initialReels)
-  }, [])
+    // Function to handle spin logic
+    const handleSpin = () => {
+      if (isSpinning) return;
 
-  useEffect(() => {
-    return () => {
-      spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout))
-    }
-  }, [])
+      spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
+      spinTimeoutsRef.current = [];
 
-  useEffect(() => {
-    if (action === ESlotActions.PLAY && !isSpinning) {
-      spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout))
-      spinTimeoutsRef.current = []
+      const generatedData = viewGenerator(4, 5);
 
-      // Generate the final result data
-      const generatedData = viewGenerator(4, 5)
+      setIsSpinning(true);
+      setSpinningColumns([true, true, true, true, true]);
 
-      setIsSpinning(true)
-      setSpinningColumns([true, true, true, true, true])
-
-      // Create new reels with random symbols first, then the final result at the end
       const newReels = Array(5)
         .fill(0)
         .map((_, colIndex) => {
-          const reel = []
-
-          // Add random symbols first
+          const reel = [];
           for (let i = 0; i < REEL_LENGTH - 4; i++) {
-            // Use actual image paths from your result data
-            const randomResultIndex = Math.floor(Math.random() * 4)
-            reel.push(generatedData[randomResultIndex][colIndex])
+            const randomResultIndex = Math.floor(Math.random() * 4);
+            reel.push(generatedData[randomResultIndex][colIndex]);
           }
-
-          // Add the final result symbols at the end
           for (let rowIndex = 0; rowIndex < 4; rowIndex++) {
-            reel.push(generatedData[rowIndex][colIndex])
+            reel.push(generatedData[rowIndex][colIndex]);
           }
 
-          return reel
-        })
+          return reel;
+        });
 
-      // Update the reels state with the full animation reels
-      setReels(newReels)
+      setReels(newReels);
 
-      // Start the animations for all reels
       for (let i = 0; i < 5; i++) {
         if (reelsRef.current[i]) {
-          // Position the reel at the top initially (showing the random symbols)
-          reelsRef.current[i].style.transition = "none"
-          reelsRef.current[i].style.transform = `translateY(-${(REEL_LENGTH - 4) * 200}px)`
+          reelsRef.current[i].style.transition = "none";
+          reelsRef.current[i].style.transform = `translateY(-${(REEL_LENGTH - 4) * 200}px)`;
 
-          void reelsRef.current[i].offsetHeight
+          void reelsRef.current[i].offsetHeight;
 
-          // Animate to the bottom position (showing the final result)
-          reelsRef.current[i].style.transition = `transform ${2 + i * 0.2}s cubic-bezier(0.1, 0.3, 0.3, 1)`
-          reelsRef.current[i].style.transform = "translateY(0)"
+          reelsRef.current[i].style.transition = `transform ${2 + i * 0.2}s cubic-bezier(0.1, 0.3, 0.3, 1)`;
+          reelsRef.current[i].style.transform = "translateY(0)";
         }
       }
 
-      const newTimeouts: any[] = []
+      const newTimeouts: any[] = [];
 
-      // Set staggered timeouts for each column to stop spinning
       for (let i = 0; i < 5; i++) {
-        // Calculate when this reel should stop (animation duration + a small buffer)
-        const reelStopTime = (2 + i * 0.2 + 0.1) * 1000
+        const reelStopTime = (2 + i * 0.2 + 0.1) * 1000;
 
         const columnTimeout = setTimeout(() => {
-          // Just update the spinning state for this column
-          // Don't update any values
           setSpinningColumns((prev) => {
-            const updated = [...prev]
-            updated[i] = false
+            const updated = [...prev];
+            updated[i] = false;
+            
+            return updated;
+          });
 
-            return updated
-          })
-
-          // If this is the last column, set isSpinning to false
           if (i === 4) {
             setTimeout(() => {
-              setIsSpinning(false)
-            }, 100)
+              setIsSpinning(false);
+              updateTotalWin();
+            }, 100);
           }
-        }, reelStopTime)
+        }, reelStopTime);
 
-        newTimeouts.push(columnTimeout)
+        newTimeouts.push(columnTimeout);
       }
 
-      spinTimeoutsRef.current = newTimeouts
-    }
-  }, [action, isSpinning])
+      spinTimeoutsRef.current = newTimeouts;
+    };
 
-  const setReelRef = (index: number) => (el: HTMLDivElement) => {
-    reelsRef.current[index] = el
-  }
+    // Function to update total win after spin finishes
+    const updateTotalWin = () => {
+      if (setTotalWin) {
+        setTotalWin((prevTotalWin) => {
+          if (!prevTotalWin) return 24;
+          const newTotalWin = prevTotalWin + prevTotalWin * 1.1;
 
-  return (
-    <div className={styles.slotView}>
-      <div className={styles.slotView_container}>
-        <div className={styles.slotView_container_slot}>
-          <img src={ClipGaming || "/placeholder.svg"} alt="clipGaming" />
-          <div className={styles.slotView_container_slot_game}>
-            <div className={styles.game}>
-              <div className={styles.reelsContainer}>
-                {Array(5)
-                  .fill(0)
-                  .map((_, colIndex) => (
-                    <div
-                      key={colIndex}
-                      className={`${styles.reelColumn} ${spinningColumns[colIndex] ? styles.spinning : ""}`}
-                    >
-                      <div className={styles.reel} ref={setReelRef(colIndex)}>
-                        {reels[colIndex]?.map((symbol, symbolIndex) => (
-                          <div key={`reel-${symbolIndex}`} className={styles.slotItem}>
-                            <img
-                              src={symbol || "/placeholder.svg"}
-                              alt=""
-                              loading="eager"
-                              onError={(e) => {
-                                // If image fails to load, replace with a colored div
-                                const target = e.target as HTMLImageElement
-                                target.style.display = "none"
-                                target.parentElement!.style.backgroundColor = "#333"
-                              }}
-                            />
-                          </div>
-                        ))}
-                      </div>
+          return Math.floor(newTotalWin);
+        });
+      }
+    };
+
+    useEffect(() => {
+      if (action === ESlotActions.PLAY && !isSpinning) {
+        handleSpin();
+      }
+    }, [action, isSpinning]);
+
+    const setReelRef = (index: number) => (el: HTMLDivElement) => {
+      reelsRef.current[index] = el;
+    };
+
+    return (
+        <div className={styles.slotView} style={selectedBonus ? { justifyContent: 'center', height:"auto" } : {}}>
+            <div className={styles.slotView_container}>
+                <div className={styles.slotView_container_slot}>
+                    <img src={ClipGaming || '/placeholder.svg'} alt='clipGaming' />
+                    <div className={styles.slotView_container_slot_game}>
+                        <div className={styles.game}>
+                            <div className={styles.reelsContainer}>
+                                {Array(5)
+                                    .fill(0)
+                                    .map((_, colIndex) => (
+                                        <div
+                                            key={colIndex}
+                                            className={`${styles.reelColumn} ${spinningColumns[colIndex] ? styles.spinning : ''}`}
+                                        >
+                                            <div className={styles.reel} ref={setReelRef(colIndex)}>
+                                                {reels[colIndex]?.map((symbol, symbolIndex) => (
+                                                    <div
+                                                        key={`reel-${symbolIndex}`}
+                                                        className={styles.slotItem}
+                                                    >
+                                                        <img
+                                                            src={symbol || '/placeholder.svg'}
+                                                            alt=''
+                                                            loading='eager'
+                                                            onError={(e) => {
+                                                                const target =
+                                                                    e.target as HTMLImageElement;
+                                                                target.style.display = 'none';
+                                                                target.parentElement!.style.backgroundColor =
+                                                                    '#333';
+                                                            }}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                            </div>
+                        </div>
                     </div>
-                  ))}
-              </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  )
-}
-
+    );
+};

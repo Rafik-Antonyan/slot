@@ -1,0 +1,32 @@
+.totalWin {
+    position: fixed;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    
+    &_video {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 100;
+    }
+    
+    &_amount {
+      position: relative;
+      z-index: 101;
+      font-weight: bold;
+      color: #ffdf00; /* Gold color for win amount */
+      text-shadow: 0 0 10px rgba(255, 223, 0, 0.7), 0 0 20px rgba(255, 223, 0, 0.5);
+      transition: font-size 0.1s ease-out;
+      text-align: center;
+    }
+  }
+  
+  
