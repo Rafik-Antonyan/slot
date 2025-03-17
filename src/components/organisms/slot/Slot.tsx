@@ -3,11 +3,11 @@ import { SlotButtons } from 'components/molecules/slotButtons/SlotButtons';
 import { SlotView } from 'components/molecules/slotView/SlotView';
 import { EBonuses, ESlotActions } from 'utils/types/slotActions';
 import { ISlotData } from 'utils/types/slot';
-import myVideo from '../../../assets/mp4/main_interface_1.mp4';
 import { BonusModal } from 'components/molecules/bonusModal/BonusModal';
 import { Modal } from 'components/molecules/modal/Modal';
-import styles from './slot.module.scss';
 import { BonusRound } from 'components/organisms/bonusRound/BonusRound';
+import myVideo from '../../../assets/mp4/main_interface_1.mp4';
+import styles from './slot.module.scss';
 
 export const Slot: React.FC = () => {
     const [action, setAction] = useState<ESlotActions>(ESlotActions.PAUSE);

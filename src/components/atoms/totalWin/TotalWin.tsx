@@ -6,8 +6,7 @@ import { EBonuses } from "utils/types/slotActions";
 
 interface ITotalWin {
   totalWin: number;
-      setSelectedBonus: React.Dispatch<React.SetStateAction<EBonuses | null>>
-  
+  setSelectedBonus: React.Dispatch<React.SetStateAction<EBonuses | null>>
 }
 
 export const TotalWin: React.FC<ITotalWin> = ({ totalWin, setSelectedBonus }) => {
