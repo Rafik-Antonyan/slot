@@ -1,8 +1,8 @@
 import React from "react"
 import { useEffect, useState, useRef } from "react"
 import video from "../../../assets/mp4/chips.mp4"
-import styles from "./totalWin.module.scss"
 import { EBonuses } from "utils/types/slotActions";
+import styles from "./totalWin.module.scss"
 
 interface ITotalWin {
   totalWin: number;
@@ -29,7 +29,6 @@ export const TotalWin: React.FC<ITotalWin> = ({ totalWin, setSelectedBonus }) =>
         const currentValue = Math.floor(progress * targetValue)
         setDisplayValue(currentValue)
 
-        // Calculate font size (16px to 32px)
         const currentFontSize = 48 + 48 * progress
         setFontSize(currentFontSize)
 

@@ -11,7 +11,7 @@ interface IBonusSlot {
 }
 
 export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonus }) => {
-    const [freeSpins, setFreeSpins] = useState<number>(3);
+    const [freeSpins, setFreeSpins] = useState<number>(10);
     const [totalWin, setTotalWin] = useState<number>(0);
     const [isResult, setIsResult] = useState<boolean>(false);
 

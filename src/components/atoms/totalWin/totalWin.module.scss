@@ -9,26 +9,36 @@
     overflow: hidden;
     top: 0;
     left: 0;
-    
+
     &_video {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 100;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 100;
     }
-    
+
     &_amount {
-      position: relative;
-      z-index: 101;
-      font-weight: bold;
-      color: #ffdf00;
-      text-shadow: 0 0 10px rgba(255, 223, 0, 0.7), 0 0 20px rgba(255, 223, 0, 0.5);
-      transition: font-size 0.1s ease-out;
-      will-change: font-size;
-      transform: translateZ(0);
-      text-align: center;
+        position: relative;
+        z-index: 101;
+        font-weight: bold;
+        color: #ffdf00;
+        text-shadow:
+            0 0 10px rgba(255, 223, 0, 0.7),
+            0 0 20px rgba(255, 223, 0, 0.5);
+        text-align: center;
+        animation: fontSizeAnimation 5s forwards;
+        font-size: 48px;
+        will-change: font-size;
+        transform: translateZ(0);
     }
-  }
-  
-  
+}
+
+@keyframes fontSizeAnimation {
+    0% {
+        font-size: 48px;
+    }
+    100% {
+        font-size: 96px;
+    }
+}
