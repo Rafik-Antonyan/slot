@@ -11,7 +11,7 @@ interface ITotalWin {
 
 export const TotalWin: React.FC<ITotalWin> = ({ totalWin, setSelectedBonus }) => {
   const [displayValue, setDisplayValue] = useState(0)
-  const [fontSize, setFontSize] = useState(16)
+  const [fontSize, setFontSize] = useState(48)
   const videoRef = useRef<HTMLVideoElement>(null)
 
   // Custom hook for the counting animation
@@ -36,7 +36,9 @@ export const TotalWin: React.FC<ITotalWin> = ({ totalWin, setSelectedBonus }) =>
         if (progress < 1) {
           animationFrameId = requestAnimationFrame(animate)
         } else {
-          setSelectedBonus(null) // Reset selected bonus after animation
+          setTimeout(() => {
+            setSelectedBonus(null) // Reset selected bonus after animation
+          }, 1500)
         }
       }
 
@@ -82,6 +84,15 @@ export const TotalWin: React.FC<ITotalWin> = ({ totalWin, setSelectedBonus }) =>
       }
     }
   }, []) // Empty dependency array means this runs once on mount
+
+  console.log("fontSize", fontSize)
+
+  useEffect(() => {
+    const totalWinElement:HTMLDivElement = document.querySelector(`.${styles.totalWin_amount}`)!;
+    if (totalWinElement) {
+      totalWinElement.style.fontSize = `${fontSize}px`;
+    }
+  }, [fontSize]);
 
   return (
     <div className={styles.totalWin}>

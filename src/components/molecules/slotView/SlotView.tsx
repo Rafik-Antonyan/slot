@@ -133,7 +133,9 @@ export const SlotView: React.FC<ISlotView> = ({ action, selectedBonus, freeSpins
           setTimeout(() => {
             setIsSpinning(false)
             updateTotalWin()
-            captureWildPositions()
+            if(selectedBonus){
+              captureWildPositions()
+            }
           }, 100)
         }
       }, reelStopTime)
@@ -226,7 +228,7 @@ export const SlotView: React.FC<ISlotView> = ({ action, selectedBonus, freeSpins
   // }
 
   useEffect(() => {
-    if (finalResult.length && !isSpinning) {
+    if (finalResult.length && !isSpinning && selectedBonus) {
       setTimeout(captureWildPositions, 500)
     }
   }, [finalResult, isSpinning])

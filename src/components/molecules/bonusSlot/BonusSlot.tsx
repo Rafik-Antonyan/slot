@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SlotView } from '../slotView/SlotView';
 import { BonusRoundButtons } from '../bonusRoundButtons/BonusRoundButtons';
 import { EBonuses } from 'utils/types/slotActions';
@@ -11,8 +11,17 @@ interface IBonusSlot {
 }
 
 export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonus }) => {
-    const [freeSpins, setFreeSpins] = useState<number>(10);
+    const [freeSpins, setFreeSpins] = useState<number>(3);
     const [totalWin, setTotalWin] = useState<number>(0);
+    const [isResult, setIsResult] = useState<boolean>(false);
+
+    useEffect(() => {
+        if(!freeSpins){
+            setTimeout(() => {
+                setIsResult(true)
+            }, 3300)
+        }
+    },[freeSpins])
 
     return (
         <div className={styles.bonusSlot}>
@@ -24,7 +33,7 @@ export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonu
                     setTotalWin={setTotalWin}
                 />
                 <BonusRoundButtons freeSpins={freeSpins} totalWin={totalWin} />
-                {!freeSpins && <TotalWin totalWin={totalWin} setSelectedBonus={setSelectedBonus} />}
+                {isResult && <TotalWin totalWin={totalWin} setSelectedBonus={setSelectedBonus} />}
             </div>
         </div>
     );

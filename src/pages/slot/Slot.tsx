@@ -5,7 +5,7 @@ import { GameDescription } from 'assets/png';
 import styles from './slot.module.scss';
 
 const Slot: React.FC = () => {
-    const [step, setStep] = useState<number>(2);
+    const [step, setStep] = useState<number>(0);
 
     return (
         <div className={styles.slot}>

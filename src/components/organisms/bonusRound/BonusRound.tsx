@@ -11,7 +11,7 @@ interface IBonusRound {
 }
 
 export const BonusRound: React.FC<IBonusRound> = ({ selectedBonus, setSelectedBonus }) => {
-    const [step, setStep] = useState<number>(2);
+    const [step, setStep] = useState<number>(0);
 
     return (
         <div className={styles.bonusRound} onClick={() => step === 0 && setStep(1)}>
