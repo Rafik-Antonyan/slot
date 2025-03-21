@@ -1,6 +1,6 @@
 import React from "react"
 import { useEffect, useState, useRef } from "react"
-import video from "../../../assets/mp4/chips.mp4"
+import video from "../../../assets/mp4/coin.webm"
 import { EBonuses } from "utils/types/slotActions";
 import styles from "./totalWin.module.scss"
 

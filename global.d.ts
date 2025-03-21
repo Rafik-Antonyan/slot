@@ -34,3 +34,17 @@ declare module '*.jpg' {
     export default value;
   
 }
+
+declare module '*.mov' {
+    const value: string;
+  
+    export default value;
+  
+}
+
+declare module '*.webm' {
+    const value: string;
+  
+    export default value;
+  
+}
