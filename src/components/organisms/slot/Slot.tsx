@@ -6,7 +6,7 @@ import { ISlotData } from 'utils/types/slot';
 import { BonusModal } from 'components/molecules/bonusModal/BonusModal';
 import { Modal } from 'components/molecules/modal/Modal';
 import { BonusRound } from 'components/organisms/bonusRound/BonusRound';
-import myVideo from '../../../assets/mp4/main_interface_1.mp4';
+import myVideo from '../../../assets/mp4/main_interface.mp4';
 import styles from './slot.module.scss';
 
 export const Slot: React.FC = () => {

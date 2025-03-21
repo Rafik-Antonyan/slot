@@ -43,7 +43,7 @@ export const SlotView: React.FC<ISlotView> = ({ action, selectedBonus, freeSpins
     const initialReels = Array(5)
       .fill(0)
       .map((_, colIndex) => {
-        const reel = []
+        const reel:any  = []
         for (let rowIndex = 0; rowIndex < 4; rowIndex++) {
           reel.push(initialData[rowIndex][colIndex])
         }
@@ -106,13 +106,45 @@ export const SlotView: React.FC<ISlotView> = ({ action, selectedBonus, freeSpins
 
     for (let i = 0; i < 5; i++) {
       if (reelsRef.current[i]) {
+        // Reset the element
         reelsRef.current[i].style.transition = "none"
         reelsRef.current[i].style.transform = `translateY(-${(REEL_LENGTH - 4) * 200}px)`
-
+    
         void reelsRef.current[i].offsetHeight
-
-        reelsRef.current[i].style.transition = `transform ${2 + i * 0.2}s cubic-bezier(0.1, 0.3, 0.3, 1)`
-        reelsRef.current[i].style.transform = "translateY(0)"
+    
+        // Create a unique animation name with timestamp to ensure it's always fresh
+        const timestamp = Date.now()
+        const animationName = `spinReel${i}_${timestamp}`
+        const duration = 2 + i * 0.2
+        
+        // Create a new style element each time (removing old ones if they exist)
+        const oldStyle = document.getElementById(`reel-style-${i}`)
+        if (oldStyle) {
+          oldStyle.remove()
+        }
+        
+        const styleEl = document.createElement('style')
+        styleEl.id = `reel-style-${i}`
+        document.head.appendChild(styleEl)
+        
+        // Define keyframes with overshoot
+        styleEl.innerHTML = `
+          @keyframes ${animationName} {
+            0% {
+              transform: translateY(-${(REEL_LENGTH - 4) * 200}px);
+            }
+            90% {
+              transform: translateY(20px); /* Overshoot by 10px */
+            }
+            100% {
+              transform: translateY(0); /* Return to final position */
+            }
+          }
+        `
+        
+        // Apply the animation
+        reelsRef.current[i].style.animation = `${animationName} ${duration}s cubic-bezier(0.1, 0.3, 0.3, 1)`
+        reelsRef.current[i].style.animationFillMode = 'forwards'
       }
     }
 
