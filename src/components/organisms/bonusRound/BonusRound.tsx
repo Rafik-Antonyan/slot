@@ -11,7 +11,7 @@ interface IBonusRound {
 }
 
 export const BonusRound: React.FC<IBonusRound> = ({ selectedBonus, setSelectedBonus }) => {
-    const [step, setStep] = useState<number>(0);
+    const [step, setStep] = useState<number>(1);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -50,14 +50,14 @@ export const BonusRound: React.FC<IBonusRound> = ({ selectedBonus, setSelectedBo
                     ),
                 }[step]
             }
-             <video
-                            ref={videoRef}
-                            src={ROULETTE}
-                            className={styles.video}
-                            onEnded={handleVideoEnd}
-                            playsInline
-                            muted
-                        />
+            <video
+                ref={videoRef}
+                src={ROULETTE}
+                className={styles.video}
+                onEnded={handleVideoEnd}
+                playsInline
+                muted
+            />
         </div>
     );
 };
