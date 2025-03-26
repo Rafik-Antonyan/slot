@@ -36,7 +36,7 @@
                 padding: 17px;
 
                 & > .game {
-                    background-color: #1E1E1E;
+                    background-color: #1e1e1e;
                     width: 100%;
                     height: 100%;
                     position: relative;
@@ -100,6 +100,22 @@
     }
 }
 
-.staticWild{
-    background-color: #1E1E1E;
+.staticWild {
+    background-color: #1e1e1e;
 }
+
+.expandingCell {
+    pointer-events: none;
+    box-sizing: border-box;
+    border: 2px solid white;
+    animation: pulseExpansion 0.5s infinite alternate;
+  }
+  
+  @keyframes pulseExpansion {
+    from {
+      opacity: 0.5;
+    }
+    to {
+      opacity: 0.9;
+    }
+  }
