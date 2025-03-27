@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { ClipGaming } from 'assets/png';
 import { viewGenerator } from 'utils/generators/viewGenerator';
 import { EBonuses, ESlotActions } from 'utils/types/slotActions';
+import HANDS_VIDEO from '../../../assets/mp4/hands.mp4';
 import styles from './slotView.module.scss';
 
 interface ISlotView {
@@ -47,12 +48,13 @@ export const SlotView: React.FC<ISlotView> = ({
         {
             column: number;
             startRow: number;
-            topExpansion: number;
-            bottomExpansion: number;
+            startY: number;
+            height: number;
             isAnimating: boolean;
         }[]
     >([]);
     const gameContainerRef = useRef<HTMLDivElement>(null);
+    const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
     // Add state for tracking free spins
     const freeSpinTimeoutRef = useRef<any>(null);
@@ -87,7 +89,17 @@ export const SlotView: React.FC<ISlotView> = ({
 
     // Trigger next free spin when current spin completes
     useEffect(() => {
-        if (freeSpins && freeSpins > 0 && !isSpinning) {
+        if (
+            freeSpins &&
+            freeSpins > 0 &&
+            !isSpinning &&
+            !(
+                selectedBonus === EBonuses.INTERROGATION &&
+                finalResult.flat(Infinity).includes('/static/media/wild.4d06ca8c9b6b5c911465.png')
+            )
+        ) {
+            console.log('************');
+
             freeSpinTimeoutRef.current = setTimeout(() => {
                 handleSpin();
                 setFreeSpins!((prev) => prev - 1);
@@ -185,7 +197,11 @@ export const SlotView: React.FC<ISlotView> = ({
 
                 if (i === 4) {
                     setTimeout(() => {
-                        if(selectedBonus !== EBonuses.INTERROGATION || (selectedBonus === EBonuses.INTERROGATION && expandingElements.length === 0)){
+                        if (
+                            selectedBonus !== EBonuses.INTERROGATION ||
+                            (selectedBonus === EBonuses.INTERROGATION &&
+                                expandingElements.length === 0)
+                        ) {
                             setIsSpinning(false);
                             updateTotalWin();
                             if (selectedBonus === EBonuses.GOLDEN) {
@@ -277,100 +293,87 @@ export const SlotView: React.FC<ISlotView> = ({
     };
 
     const expandView = () => {
-        console.log('3333333333');
-        
         if (!finalResult.length || !gameContainerRef.current) return;
-        console.log('oooooooooooo');
-        
+
+        // Clear any previous expanding elements
+        setExpandingElements([]);
+
+        const slotItemHeight = 180; // Height of a single slot item
+        const gameRect = gameContainerRef.current.getBoundingClientRect();
+
         for (let column = 0; column < finalResult.length; column++) {
             for (let row = 0; row < 4; row++) {
                 // Check for wild symbols
                 if (finalResult[column]?.[row] === '/static/media/wild.4d06ca8c9b6b5c911465.png') {
-                    console.log(`Found wild at column ${column}, row ${row}, starting expansion`);
+                    // Find the element position
+                    const slotItemElement = document.querySelector(
+                        `.${styles.reelColumn}:nth-child(${column + 1}) .${styles.slotItem}:nth-child(${row + 1})`,
+                    );
 
-                    // Start the expansion animation from this position
-                    setExpandingElements((prev) => [
-                        ...prev,
-                        {
-                            column,
-                            startRow: row,
-                            topExpansion: 0, // Will animate from 0 to row
-                            bottomExpansion: 0, // Will animate from 0 to (3-row)
-                            isAnimating: true,
-                        },
-                    ]);
+                    if (slotItemElement) {
+                        const rect = slotItemElement.getBoundingClientRect();
 
-                    // Start the animation sequence
-                    animateExpansion(column, row);
+                        // Calculate the starting position relative to the game container
+                        const startY = rect.top - gameRect.top;
+
+                        console.log(
+                            `Found wild at column ${column}, row ${row}, starting expansion from Y: ${startY}`,
+                        );
+
+                        // Add the expanding element with initial height
+                        setExpandingElements((prev) => [
+                            ...prev,
+                            {
+                                column,
+                                startRow: row,
+                                startY,
+                                height: slotItemHeight, // Start with the height of one slot
+                                isAnimating: true,
+                            },
+                        ]);
+
+                        // Start the animation
+                        setTimeout(() => {
+                            animateExpansion(column, row, startY);
+                        }, 50);
+                    }
                 }
             }
         }
-        console.log('rrrrrrrrrrrrrrrrr');
-        if(expandingElements.length > 0){
+        if (finalResult.flat(Infinity).includes('/static/media/wild.4d06ca8c9b6b5c911465.png')) {
             setTimeout(() => {
-                console.log('wewwwwwwwwwwwwwwwwwwwww');
-                
                 setExpandingElements([]);
+                handleSpin();
                 setFreeSpins!((prev) => prev - 1);
-                setIsSpinning(false);
-            },5000)
+            }, 3000);
         }
     };
 
     // Add this function to handle the progressive animation
-    const animateExpansion = (column: number, startRow: number) => {
-        const maxTopExpansion = startRow;
-        const maxBottomExpansion = 3 - startRow;
-        let currentTopExpansion = 0;
-        let currentBottomExpansion = 0;
+    const animateExpansion = (column: number, startRow: number, startY: number) => {
+        const slotItemHeight = 195;
+        const totalHeight = slotItemHeight * 4; // Total height of the slot view
 
-        // Animation speed (ms)
-        const animationSpeed = 100;
+        // Calculate how much to expand upward and downward
+        const expandUpward = startRow * slotItemHeight;
 
-        // Animate expansion in both directions
-        const animationInterval = setInterval(() => {
-            let shouldContinue = false;
+        // Calculate the final position and height
+        const finalY = startY - expandUpward - startRow * 5;
+        const finalHeight = totalHeight;
 
-            // Update expansions
-            if (currentTopExpansion < maxTopExpansion) {
-                currentTopExpansion++;
-                shouldContinue = true;
-            }
-
-            if (currentBottomExpansion < maxBottomExpansion) {
-                currentBottomExpansion++;
-                shouldContinue = true;
-            }
-
-            // Update state with new expansion values
-            setExpandingElements((prev) =>
-                prev.map((item) =>
-                    item.column === column && item.startRow === startRow
-                        ? {
-                              ...item,
-                              topExpansion: currentTopExpansion,
-                              bottomExpansion: currentBottomExpansion,
-                          }
-                        : item,
-                ),
-            );
-
-            // Stop the interval when both expansions are complete
-            if (!shouldContinue) {
-                clearInterval(animationInterval);
-
-                // Mark animation as complete
-                setTimeout(() => {
-                    setExpandingElements((prev) =>
-                        prev.map((item) =>
-                            item.column === column && item.startRow === startRow
-                                ? { ...item, isAnimating: false }
-                                : item,
-                        ),
-                    );
-                }, 500); // Keep the final state visible for a moment
-            }
-        }, animationSpeed);
+        // Update the element to its final expanded state
+        setExpandingElements((prev) =>
+            prev.map((item) =>
+                item.column === column && item.startRow === startRow
+                    ? {
+                          ...item,
+                          startY: finalY, // Move up to accommodate upward expansion
+                          height: finalHeight, // Expand to full height
+                          isAnimating: false,
+                      }
+                    : item,
+            ),
+        );
     };
 
     // Add this function to help with debugging
@@ -381,9 +384,6 @@ export const SlotView: React.FC<ISlotView> = ({
     // }
 
     useEffect(() => {
-        console.log(selectedBonus,'11111111111111');
-        console.log(finalResult,'222222222222');
-        
         if (finalResult.length && !isSpinning) {
             if (selectedBonus === EBonuses.GOLDEN) {
                 setTimeout(captureWildPositions, 500);
@@ -392,8 +392,7 @@ export const SlotView: React.FC<ISlotView> = ({
             }
         }
     }, [finalResult, isSpinning, selectedBonus]);
-    console.log(isSpinning,'-----------------');
-    
+
     return (
         <div
             className={styles.slotView}
@@ -464,52 +463,53 @@ export const SlotView: React.FC<ISlotView> = ({
                                 </div>
                             ))}
                             {expandingElements.map((item, index) => {
-                                // Calculate the positions for the expanding elements
-                                const cells = [];
-
-                                // Add the original cell (where the wild was found)
-                                cells.push({
-                                    column: item.column,
-                                    row: item.startRow,
-                                    key: `original-${index}`,
-                                });
-
-                                // Add cells for top expansion
-                                for (let i = 1; i <= item.topExpansion; i++) {
-                                    cells.push({
-                                        column: item.column,
-                                        row: item.startRow - i,
-                                        key: `top-${index}-${i}`,
-                                    });
+                                // Set up the video ref
+                                if (videoRefs.current.length <= index) {
+                                    videoRefs.current.push(null);
                                 }
 
-                                // Add cells for bottom expansion
-                                for (let i = 1; i <= item.bottomExpansion; i++) {
-                                    cells.push({
-                                        column: item.column,
-                                        row: item.startRow + i,
-                                        key: `bottom-${index}-${i}`,
-                                    });
-                                }
-
-                                // Render all cells
-                                return cells.map((cell) => (
+                                return (
                                     <div
-                                        key={cell.key}
-                                        className={styles.expandingCell}
+                                        key={`expanding-element-${index}`}
+                                        className={styles.expandingElement}
                                         style={{
                                             position: 'absolute',
-                                            left: `${cell.column * 180}px`, // Adjust based on your slot width
-                                            top: `${cell.row * 180}px`, // Adjust based on your slot height
+                                            overflow: 'hidden',
+                                            left: `${item.column * 200 + 10}px`, // Adjust based on your slot width
+                                            top: `${item.startY - 20}px`,
                                             width: '180px',
-                                            height: '180px',
-                                            backgroundColor: 'rgba(255, 0, 0, 0.7)', // Red background with transparency
+                                            height: `${item.height}px`,
+                                            backgroundColor: "#1e1e1e",
                                             zIndex: 90, // Below the wild symbols
-                                            transition: 'all 0.2s ease-out',
-                                            opacity: item.isAnimating ? 1 : 0.5,
+                                            transition: 'all 0.5s ease-out', // Smooth transition for the expansion
                                         }}
-                                    />
-                                ));
+                                    >
+                                        <video
+                                            ref={(el) => {
+                                                videoRefs.current[index] = el;
+                                            }}
+                                            muted
+                                            className={styles.expandingVideo}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                                opacity: item.isAnimating ? 0 : 1,
+                                                transition: 'opacity 0.3s ease-in',
+                                            }}
+                                            onLoadedData={() => {
+                                                if (item.isAnimating && videoRefs.current[index]) {
+                                                    setTimeout(() => {
+                                                        videoRefs.current[index]?.play();
+                                                    }, 1000)
+                                                }
+                                            }}
+                                        >
+                                            <source src={HANDS_VIDEO} type='video/mp4' />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                );
                             })}
                         </div>
                     </div>
