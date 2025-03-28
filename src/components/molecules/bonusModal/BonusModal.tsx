@@ -5,53 +5,96 @@ import { useOutsideClick } from 'hooks/useOutSideClick';
 import { EBonuses } from 'utils/types/slotActions';
 import styles from './bonusModal.module.scss';
 
-interface IBonusModal{
-    setIsOpenBonuses: React.Dispatch<React.SetStateAction<boolean>>
-    setSelectedBonus: React.Dispatch<React.SetStateAction<EBonuses | null>>
+interface IBonusModal {
+    setIsOpenBonuses: React.Dispatch<React.SetStateAction<boolean>>;
+    setSelectedBonus: React.Dispatch<React.SetStateAction<EBonuses | null>>;
 }
 
-export const BonusModal: React.FC<IBonusModal> = ({setIsOpenBonuses, setSelectedBonus}) => {
+const BONUS_DETAILS = {
+    [EBonuses.GOLDEN]: {
+        img: CleanGoldenChip,
+        title: 'GOLDEN CHIP',
+        multiple: 10,
+    },
+    [EBonuses.INTERROGATION]: {
+        img: CleanBonusChair,
+        title: 'INTERROGATION',
+        multiple: 20,
+    },
+    [EBonuses.RAID]: {
+        img: CleanRaid,
+        title: 'RAID',
+        multiple: 30,
+    },
+};
+
+export const BonusModal: React.FC<IBonusModal> = ({ setIsOpenBonuses, setSelectedBonus }) => {
+    const [bet, setBet] = React.useState<number>(0.2);
+    const [unconfirmedBonus, setUnconfirmedBonus] = React.useState<EBonuses | null>(null);
     const modalRef = React.useRef<HTMLDivElement>(null);
 
-    useOutsideClick(modalRef, () => setIsOpenBonuses(false))
-    
+    useOutsideClick(modalRef, () => setIsOpenBonuses(false));
+
     return (
         <div className={styles.bonusModal}>
-            <div className={styles.bonusModal_container} ref={modalRef}>
-                <div className={styles.bonusModal_container_bet}>
-                    <div></div>
-                    <div>
-                        <p>BET</p>
+            {!unconfirmedBonus ? (
+                <div className={styles.bonusModal_container} ref={modalRef}>
+                    <div className={styles.bonusModal_container_bet}>
+                        <div></div>
                         <div>
-                            <Button children='-' onClick={() => {}} />
-                            <span>$0.20</span>
-                            <Button children='+' onClick={() => {}} />
+                            <p>BET</p>
+                            <div>
+                                <Button
+                                    disabled={bet === 0.2}
+                                    children='-'
+                                    onClick={() => setBet((prev) => prev - 0.2)}
+                                />
+                                <span>${bet.toFixed(2)}</span>
+                                <Button children='+' onClick={() => setBet((prev) => prev + 0.2)} />
+                            </div>
+                        </div>
+                        <div></div>
+                    </div>
+                    <div className={styles.bonusModal_container_bonuses}>
+                        {Object.entries(BONUS_DETAILS).map(([key, bonus], index) => (
+                            <div key={index}>
+                                <img src={bonus.img} alt={bonus.title} />
+                                <p>{bonus.title}</p>
+                                <span>${(bet * bonus.multiple).toFixed(2)}</span>
+                                <Button
+                                    children='BUY'
+                                    onClick={() => setUnconfirmedBonus(key as EBonuses)}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ) : (
+                <div className={styles.bonusModal_confirm}>
+                    <div className={styles.bonusModal_confirm_container} ref={modalRef}>
+                        <div>
+                            <img
+                                src={BONUS_DETAILS[unconfirmedBonus].img}
+                                alt={BONUS_DETAILS[unconfirmedBonus].title}
+                            />
+                            <div className={styles.bonusModal_confirm_text}>
+                                <p>{BONUS_DETAILS[unconfirmedBonus].title}</p>
+                                <span>${(bet * 10).toFixed(2)}</span>
+                                <p className={styles.info_text}>
+                                    Will be substructed from your balance
+                                </p>
+                            </div>
+                            <div className={styles.bonusModal_confirm_container_buttons}>
+                                <Button children='BACK' onClick={() => setUnconfirmedBonus(null)} />
+                                <Button
+                                    children='OK'
+                                    onClick={() => setSelectedBonus(unconfirmedBonus)}
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div></div>
                 </div>
-                <div className={styles.bonusModal_container_bonuses}>
-                    <div>
-                        <img src={CleanGoldenChip} alt='golden' />
-                        <p>GOLDEN CHIP</p>
-                        <span>$20.00</span>
-                        <Button children='BUY' onClick={() => setSelectedBonus(EBonuses.GOLDEN)} />
-                    </div>
-                    <div>
-                        <img src={CleanBonusChair} alt='chair' />
-                        <p>INTERROGATION</p>
-                        <span>$20.00</span>
-                        <Button children='BUY' onClick={() => setSelectedBonus(EBonuses.INTERROGATION)} />
-                    </div>
-                    <div>
-                        <img src={CleanRaid} alt='raid' />
-                        <p>RAID</p>
-                        <span>$20.00</span>
-                        <Button children='BUY' onClick={() => setSelectedBonus(EBonuses.RAID)} />
-                    </div>
-                </div>
-            </div>
+            )}
         </div>
     );
 };
-

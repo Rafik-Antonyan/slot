@@ -25,6 +25,7 @@ import LoadingCharacter from './loading_character.png';
 import CleanBonusChair from './clean_bonus.png';
 import CleanGoldenChip from './clean_golden_chip.png';
 import CleanRaid from './clean_raid.png';
+import GrayChip from './gray_chip.png';
 
 export {
     BgImage,
@@ -54,4 +55,5 @@ export {
     CleanBonusChair,
     CleanGoldenChip,
     CleanRaid,
+    GrayChip,
 };

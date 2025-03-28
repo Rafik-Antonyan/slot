@@ -114,7 +114,7 @@ export const SlotView: React.FC<ISlotView> = ({
         spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
         spinTimeoutsRef.current = [];
 
-        const generatedData = viewGenerator(4, 5);
+        const generatedData = viewGenerator(4, 5, selectedBonus);
 
         setIsSpinning(true);
         setSpinningColumns([true, true, true, true, true]);
@@ -316,10 +316,6 @@ export const SlotView: React.FC<ISlotView> = ({
                         // Calculate the starting position relative to the game container
                         const startY = rect.top - gameRect.top;
 
-                        console.log(
-                            `Found wild at column ${column}, row ${row}, starting expansion from Y: ${startY}`,
-                        );
-
                         // Add the expanding element with initial height
                         setExpandingElements((prev) => [
                             ...prev,
@@ -376,19 +372,14 @@ export const SlotView: React.FC<ISlotView> = ({
         );
     };
 
-    // Add this function to help with debugging
-    // const resetAllWilds = () => {
-    //   setWildPositions([])
-    //   setWilds({})
-    //   console.log("All wilds have been reset")
-    // }
-
     useEffect(() => {
         if (finalResult.length && !isSpinning) {
             if (selectedBonus === EBonuses.GOLDEN) {
                 setTimeout(captureWildPositions, 500);
             } else if (selectedBonus === EBonuses.INTERROGATION) {
                 setTimeout(expandView, 200);
+            } else if (selectedBonus === EBonuses.RAID) {
+                // stex piti lini en astxer havaqely - multiple + wild
             }
         }
     }, [finalResult, isSpinning, selectedBonus]);
@@ -479,7 +470,7 @@ export const SlotView: React.FC<ISlotView> = ({
                                             top: `${item.startY - 20}px`,
                                             width: '180px',
                                             height: `${item.height}px`,
-                                            backgroundColor: "#1e1e1e",
+                                            backgroundColor: '#1e1e1e',
                                             zIndex: 90, // Below the wild symbols
                                             transition: 'all 0.5s ease-out', // Smooth transition for the expansion
                                         }}
@@ -501,7 +492,7 @@ export const SlotView: React.FC<ISlotView> = ({
                                                 if (item.isAnimating && videoRefs.current[index]) {
                                                     setTimeout(() => {
                                                         videoRefs.current[index]?.play();
-                                                    }, 1000)
+                                                    }, 1000);
                                                 }
                                             }}
                                         >

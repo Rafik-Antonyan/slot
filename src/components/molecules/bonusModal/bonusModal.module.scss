@@ -27,8 +27,8 @@
                 gap: 15px;
                 height: 183px;
 
-                &:nth-child(2){
-                    background-color: #130E14;
+                &:nth-child(2) {
+                    background-color: #130e14;
                 }
                 p {
                     font-size: 30px;
@@ -51,7 +51,7 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        background-color: #2C9C38;
+                        background-color: #2c9c38;
                     }
 
                     & > span {
@@ -63,7 +63,7 @@
             }
         }
 
-        &_bonuses{
+        &_bonuses {
             width: 100%;
             display: flex;
             gap: 56px;
@@ -76,23 +76,23 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 15px;
-                background-color: #130E14;
+                background-color: #130e14;
                 height: 100%;
 
-                p{
+                p {
                     font-size: 30px;
                     line-height: 28px;
                 }
 
-                span{
+                span {
                     font-size: 34px;
                     line-height: 28px;
                     font-weight: bold;
                     margin-top: 20px;
                 }
 
-                button{
-                    background-color: #2C9C38;
+                button {
+                    background-color: #2c9c38;
                     border: none;
                     margin-top: 60px;
                     height: 68px;
@@ -101,12 +101,90 @@
                     line-height: 28px;
                 }
 
-                img{
+                img {
                     width: 100%;
                     height: 290px;
                 }
             }
         }
+    }
 
+    &_confirm {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &_container {
+            width: 532px;
+            display: flex;
+            gap: 56px;
+            height: 560px;
+            color: white;
+            align-items: center;
+            justify-content: center;
+
+            & > div {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                background-color: #130e14;
+                height: 100%;
+                img {
+                    width: 70%;
+                    object-fit: cover;
+                }
+                & > .bonusModal_confirm_text {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 44px;
+                    height: 100%;
+                    margin-top: -65px;
+
+                    p {
+                        font-size: 30px;
+                        line-height: 28px;
+                    }
+
+                    span {
+                        font-size: 34px;
+                        line-height: 28px;
+                        font-weight: bold;
+                    }
+                }
+            }
+            &_buttons {
+                width: 100%;
+                display: flex;
+                height: 68px;
+                max-height: 68px;
+                flex-wrap: nowrap;
+
+                button {
+                    flex: 1;
+                    background-color: #2c9c38;
+                    width: 50%;
+                    border: none;
+                    height: 100%;
+                    font-weight: bold;
+                    font-size: 30px;
+                    line-height: 28px;
+                    height: 68px;
+
+
+                    &:first-child{
+                        background-color: #312633;
+                    }
+                }
+            }
+        }
+    }
+
+    .info_text {
+        font-size: 30px;
+        line-height: 28px;
     }
 }
