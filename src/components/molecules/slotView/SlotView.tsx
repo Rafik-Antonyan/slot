@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { useEffect, useState, useRef } from 'react';
-import { ClipGaming, Gold } from 'assets/png';
+import { ClipGaming, ExtraGold, Gold } from 'assets/png';
 import { viewGenerator } from 'utils/generators/viewGenerator';
 import { EBonuses, ESlotActions } from 'utils/types/slotActions';
 import HANDS_VIDEO from '../../../assets/mp4/hands.mp4';
@@ -13,8 +13,10 @@ interface ISlotView {
     action?: ESlotActions;
     selectedBonus?: EBonuses;
     freeSpins?: number;
+    extraSpins?: number;
     setFreeSpins?: React.Dispatch<React.SetStateAction<number>>;
     setTotalWin?: React.Dispatch<React.SetStateAction<number>>;
+    setExtraSpins?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface WildPosition {
@@ -30,8 +32,10 @@ export const SlotView: React.FC<ISlotView> = ({
     action,
     selectedBonus,
     freeSpins,
+    extraSpins,
     setFreeSpins,
     setTotalWin,
+    setExtraSpins,
 }) => {
     const [isSpinning, setIsSpinning] = useState<boolean>(false);
     const [spinningColumns, setSpinningColumns] = useState<boolean[]>([
@@ -43,8 +47,6 @@ export const SlotView: React.FC<ISlotView> = ({
     ]);
     const [reels, setReels] = useState<string[][]>([]);
     const [finalResult, setFinalResult] = useState<string[][]>([]);
-    const reelsRef = useRef<HTMLDivElement[]>([]);
-    const spinTimeoutsRef = useRef<any[]>([]);
     const [wilds, setWilds] = useState<{ [key: string]: boolean }>({});
     const [wildPositions, setWildPositions] = useState<WildPosition[]>([]);
     const [raidPositions, setRaidPositions] = useState<WildPosition[]>([]);
@@ -60,11 +62,15 @@ export const SlotView: React.FC<ISlotView> = ({
     const [wildCount, setWildCount] = useState<number>(0);
     const [muiltiplerCount, setMuiltiplerCount] = useState<number>(0);
     const [lives, setLives] = useState<number>(3);
+    const [isExtraRound, setIsExtraRound] = useState<boolean>(false);
+    const reelsRef = useRef<HTMLDivElement[]>([]);
+    const spinTimeoutsRef = useRef<any[]>([]);
     const gameContainerRef = useRef<HTMLDivElement>(null);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
     // Add state for tracking free spins
     const freeSpinTimeoutRef = useRef<any>(null);
+    const extraFreeSpinTimeoutRef = useRef<any>(null);
 
     // Initialize reels with the initial data
     useEffect(() => {
@@ -116,16 +122,26 @@ export const SlotView: React.FC<ISlotView> = ({
                 }
             }, 1000); // 1 second delay between spins
         }
-    }, [freeSpins, isSpinning]);
+    }, [freeSpins, extraSpins, isSpinning, lives]);
+
+    useEffect(() => {
+        if (isExtraRound && extraSpins && selectedBonus === EBonuses.RAID && !isSpinning) {
+            extraFreeSpinTimeoutRef.current = setTimeout(() => {
+                if (extraSpins === 0) return;
+                handleSpin();
+                setExtraSpins!((prev) => prev - 1);
+            }, 1000); // 1 second delay between spins
+        }
+    }, [isExtraRound, extraSpins, isSpinning]);
 
     // Function to handle spin logic
     const handleSpin = () => {
-        if (isSpinning || (selectedBonus && !freeSpins)) return;
+        if (isSpinning) return;
 
         spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
         spinTimeoutsRef.current = [];
 
-        const generatedData = viewGenerator(4, 5, selectedBonus);
+        const generatedData = viewGenerator(4, 5, !isExtraRound);
 
         setIsSpinning(true);
         setSpinningColumns([true, true, true, true, true]);
@@ -388,6 +404,9 @@ export const SlotView: React.FC<ISlotView> = ({
     };
 
     const handleRaidBonus = () => {
+        if(freeSpins === 0){
+            setLives((prev) => prev - 1);
+        }
         if (!finalResult.length || !freeSpins) return;
 
         capturePositions();
@@ -411,8 +430,6 @@ export const SlotView: React.FC<ISlotView> = ({
         }
 
         if (!raidsInResult && !wildsInResult && freeSpins! > 0) {
-            console.log('---------------------------');
-
             setLives((prev) => prev - 1);
             setFreeSpins!((prev) => prev - 1);
         } else {
@@ -465,6 +482,13 @@ export const SlotView: React.FC<ISlotView> = ({
         }
     }, [finalResult, isSpinning, selectedBonus]);
 
+    useEffect(() => {
+        if (freeSpins === 0) {
+            setIsExtraRound(true);
+            setLives(3);
+        }
+    }, [freeSpins]);
+
     return (
         <div
             className={styles.slotView}
@@ -489,9 +513,9 @@ export const SlotView: React.FC<ISlotView> = ({
                         <div className={styles.slotView_container_slot_right}>
                             {Array.from({ length: 3 }, (_, index) =>
                                 index < lives ? (
-                                    <img key={index} src={Gold || '/placeholder.svg'} alt='gold' />
+                                    <img key={index} src={freeSpins === 0 ? ExtraGold : Gold || '/placeholder.svg'} alt='gold' />
                                 ) : (
-                                    <div key={index}/>
+                                    <div key={index} />
                                 ),
                             )}
                         </div>

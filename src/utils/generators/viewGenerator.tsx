@@ -13,7 +13,6 @@ import {
     Women,
     GrayChip,
 } from 'assets/png';
-import { EBonuses } from 'utils/types/slotActions';
 
 const ITEM_LIST: string[] = [
     BlueChip,
@@ -31,8 +30,8 @@ const ITEM_LIST: string[] = [
 ];
 
 const RAID_ITEM_LIST: string[] = [
-    Wild,
-    Raid,
+    // Wild,
+    // Raid,
     GrayChip,
     GrayChip,
     GrayChip,
@@ -83,8 +82,8 @@ const RAID_ITEM_LIST: string[] = [
     GrayChip,
 ];
 
-export const viewGenerator = (raws: number, cols: number, selectedBonus?: EBonuses): string[][] => {
-    if (selectedBonus === EBonuses.RAID) {
+export const viewGenerator = (raws: number, cols: number, withGrayCips?: boolean): string[][] => {
+    if (withGrayCips) {
         return Array.from({ length: raws }, () =>
             Array.from(
                 { length: cols },

@@ -14,18 +14,23 @@ export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonu
     const [freeSpins, setFreeSpins] = useState<number>(selectedBonus === EBonuses.RAID ? 3 : 10);
     const [totalWin, setTotalWin] = useState<number>(0);
     const [isResult, setIsResult] = useState<boolean>(false);
+    const [extraSpins, setExtraSpins] = useState<number>(3);
 
+    console.log('extraSpins', extraSpins);
     useEffect(() => {
         if (!freeSpins) {
-            if(selectedBonus !== EBonuses.RAID){
+            if (selectedBonus !== EBonuses.RAID) {
                 setTimeout(() => {
                     setIsResult(true);
                 }, 3300);
-            }else{
-                setIsResult(true);
             }
         }
-    }, [freeSpins]);
+        if (!extraSpins && selectedBonus === EBonuses.RAID) {
+            setTimeout(() => {
+                setIsResult(true);
+            }, 3300);
+        }
+    }, [freeSpins, extraSpins]);
 
     return (
         <div className={styles.bonusSlot}>
@@ -35,8 +40,21 @@ export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonu
                     freeSpins={freeSpins}
                     setFreeSpins={setFreeSpins}
                     setTotalWin={setTotalWin}
+                    extraSpins={extraSpins}
+                    setExtraSpins={setExtraSpins}
                 />
-                <BonusRoundButtons freeSpins={freeSpins} totalWin={totalWin} />
+                {selectedBonus === EBonuses.RAID ? (
+                    <BonusRoundButtons
+                        freeSpins={freeSpins}
+                        extraSpins={extraSpins}
+                        totalWin={totalWin}
+                    />
+                ) : (
+                    <BonusRoundButtons
+                        freeSpins={freeSpins}
+                        totalWin={totalWin}
+                    />
+                )}
                 {isResult && <TotalWin totalWin={totalWin} setSelectedBonus={setSelectedBonus} />}
             </div>
         </div>
