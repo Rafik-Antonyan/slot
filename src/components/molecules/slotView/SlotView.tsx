@@ -1,9 +1,12 @@
+'use client';
+
 import type React from 'react';
 import { useEffect, useState, useRef } from 'react';
-import { ClipGaming } from 'assets/png';
+import { ClipGaming, Gold } from 'assets/png';
 import { viewGenerator } from 'utils/generators/viewGenerator';
 import { EBonuses, ESlotActions } from 'utils/types/slotActions';
 import HANDS_VIDEO from '../../../assets/mp4/hands.mp4';
+import STAR from '../../../assets/png/star.png';
 import styles from './slotView.module.scss';
 
 interface ISlotView {
@@ -44,6 +47,7 @@ export const SlotView: React.FC<ISlotView> = ({
     const spinTimeoutsRef = useRef<any[]>([]);
     const [wilds, setWilds] = useState<{ [key: string]: boolean }>({});
     const [wildPositions, setWildPositions] = useState<WildPosition[]>([]);
+    const [raidPositions, setRaidPositions] = useState<WildPosition[]>([]);
     const [expandingElements, setExpandingElements] = useState<
         {
             column: number;
@@ -53,6 +57,9 @@ export const SlotView: React.FC<ISlotView> = ({
             isAnimating: boolean;
         }[]
     >([]);
+    const [wildCount, setWildCount] = useState<number>(0);
+    const [muiltiplerCount, setMuiltiplerCount] = useState<number>(0);
+    const [lives, setLives] = useState<number>(3);
     const gameContainerRef = useRef<HTMLDivElement>(null);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
@@ -95,21 +102,25 @@ export const SlotView: React.FC<ISlotView> = ({
             !isSpinning &&
             !(
                 selectedBonus === EBonuses.INTERROGATION &&
-                finalResult.flat(Infinity).includes('/static/media/wild.4d06ca8c9b6b5c911465.png')
-            )
+                finalResult
+                    .flat(Number.POSITIVE_INFINITY)
+                    .includes('/static/media/wild.236c3e29b77d5579c87e.png')
+            ) &&
+            !(selectedBonus === EBonuses.RAID && freeSpins === 1)
         ) {
-            console.log('************');
-
             freeSpinTimeoutRef.current = setTimeout(() => {
+                if (freeSpins === 0) return;
                 handleSpin();
-                setFreeSpins!((prev) => prev - 1);
+                if (selectedBonus !== EBonuses.RAID) {
+                    setFreeSpins!((prev) => prev - 1);
+                }
             }, 1000); // 1 second delay between spins
         }
     }, [freeSpins, isSpinning]);
 
     // Function to handle spin logic
     const handleSpin = () => {
-        if (isSpinning) return;
+        if (isSpinning || (selectedBonus && !freeSpins)) return;
 
         spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
         spinTimeoutsRef.current = [];
@@ -203,9 +214,11 @@ export const SlotView: React.FC<ISlotView> = ({
                                 expandingElements.length === 0)
                         ) {
                             setIsSpinning(false);
-                            updateTotalWin();
+                            if (selectedBonus !== EBonuses.RAID) {
+                                updateTotalWin();
+                            }
                             if (selectedBonus === EBonuses.GOLDEN) {
-                                captureWildPositions();
+                                capturePositions();
                             }
                         }
                     }, 100);
@@ -241,12 +254,13 @@ export const SlotView: React.FC<ISlotView> = ({
     };
 
     // Capture the positions of wild symbols
-    const captureWildPositions = () => {
+    const capturePositions = () => {
         if (!finalResult.length || !gameContainerRef.current) return;
 
         const gameRect = gameContainerRef.current.getBoundingClientRect();
-        const newWildPositions: WildPosition[] = [...wildPositions]; // Keep existing wilds
         const newWilds = { ...wilds }; // Keep existing wilds
+        const newWildPositions: WildPosition[] = [...wildPositions]; // Keep existing wilds
+        const newRaidPositions: WildPosition[] = [...raidPositions]; // Keep existing wilds
 
         // Position correction offsets (adjust these values as needed)
         const offsetX = -15; // Correct the rightward shift
@@ -255,7 +269,7 @@ export const SlotView: React.FC<ISlotView> = ({
         for (let column = 0; column < finalResult.length; column++) {
             for (let row = 0; row < 4; row++) {
                 // Always check first 4 rows
-                if (finalResult[column]?.[row] === '/static/media/wild.4d06ca8c9b6b5c911465.png') {
+                if (finalResult[column]?.[row] === '/static/media/wild.236c3e29b77d5579c87e.png') {
                     const key = `${column}-${row}`;
 
                     // Only add if this wild is not already tracked
@@ -277,8 +291,29 @@ export const SlotView: React.FC<ISlotView> = ({
                                 x: rect.left - gameRect.left + offsetX,
                                 y: rect.top - gameRect.top + offsetY,
                             });
+                        }
+                    }
+                } else if (
+                    finalResult[column]?.[row] === '/static/media/raid.8b9b22c22b62c052518a.png'
+                ) {
+                    const key = `${column}-${row}`;
 
-                            console.log(`Added wild at column ${column}, row ${row}, position: `, {
+                    // Only add if this wild is not already tracked
+                    if (!newWilds[key]) {
+                        newWilds[key] = true;
+
+                        // Find the element position
+                        const slotItemElement = document.querySelector(
+                            `.${styles.reelColumn}:nth-child(${column + 1}) .${styles.slotItem}:nth-child(${row + 1})`,
+                        );
+
+                        if (slotItemElement) {
+                            const rect = slotItemElement.getBoundingClientRect();
+
+                            // Store the exact position with offset corrections
+                            newRaidPositions.push({
+                                column,
+                                row,
                                 x: rect.left - gameRect.left + offsetX,
                                 y: rect.top - gameRect.top + offsetY,
                             });
@@ -288,8 +323,11 @@ export const SlotView: React.FC<ISlotView> = ({
             }
         }
 
-        setWilds(newWilds);
+        if (selectedBonus !== EBonuses.RAID) {
+            setWilds(newWilds);
+        }
         setWildPositions(newWildPositions);
+        setRaidPositions(newRaidPositions);
     };
 
     const expandView = () => {
@@ -304,7 +342,7 @@ export const SlotView: React.FC<ISlotView> = ({
         for (let column = 0; column < finalResult.length; column++) {
             for (let row = 0; row < 4; row++) {
                 // Check for wild symbols
-                if (finalResult[column]?.[row] === '/static/media/wild.4d06ca8c9b6b5c911465.png') {
+                if (finalResult[column]?.[row] === '/static/media/wild.236c3e29b77d5579c87e.png') {
                     // Find the element position
                     const slotItemElement = document.querySelector(
                         `.${styles.reelColumn}:nth-child(${column + 1}) .${styles.slotItem}:nth-child(${row + 1})`,
@@ -336,13 +374,56 @@ export const SlotView: React.FC<ISlotView> = ({
                 }
             }
         }
-        if (finalResult.flat(Infinity).includes('/static/media/wild.4d06ca8c9b6b5c911465.png')) {
+        if (
+            finalResult
+                .flat(Number.POSITIVE_INFINITY)
+                .includes('/static/media/wild.236c3e29b77d5579c87e.png')
+        ) {
             setTimeout(() => {
                 setExpandingElements([]);
                 handleSpin();
                 setFreeSpins!((prev) => prev - 1);
             }, 3000);
         }
+    };
+
+    const handleRaidBonus = () => {
+        if (!finalResult.length || !freeSpins) return;
+
+        capturePositions();
+        const wildsInResult = finalResult
+            .flat()
+            .filter((symbol) => symbol === '/static/media/wild.236c3e29b77d5579c87e.png').length;
+
+        if (wildsInResult > 0) {
+            setTimeout(() => {
+                setWildCount((prev) => prev + wildsInResult);
+            }, 500);
+        }
+        const raidsInResult = finalResult
+            .flat()
+            .filter((symbol) => symbol === '/static/media/raid.8b9b22c22b62c052518a.png').length;
+
+        if (raidsInResult > 0) {
+            setTimeout(() => {
+                setMuiltiplerCount((prev) => prev + raidsInResult);
+            }, 500);
+        }
+
+        if (!raidsInResult && !wildsInResult && freeSpins! > 0) {
+            console.log('---------------------------');
+
+            setLives((prev) => prev - 1);
+            setFreeSpins!((prev) => prev - 1);
+        } else {
+            setLives(3);
+            setFreeSpins!(3);
+        }
+
+        setTimeout(() => {
+            setWildPositions([]);
+            setRaidPositions([]);
+        }, 1000);
     };
 
     // Add this function to handle the progressive animation
@@ -375,11 +456,11 @@ export const SlotView: React.FC<ISlotView> = ({
     useEffect(() => {
         if (finalResult.length && !isSpinning) {
             if (selectedBonus === EBonuses.GOLDEN) {
-                setTimeout(captureWildPositions, 500);
+                setTimeout(capturePositions, 500);
             } else if (selectedBonus === EBonuses.INTERROGATION) {
                 setTimeout(expandView, 200);
             } else if (selectedBonus === EBonuses.RAID) {
-                // stex piti lini en astxer havaqely - multiple + wild
+                setTimeout(handleRaidBonus, 200);
             }
         }
     }, [finalResult, isSpinning, selectedBonus]);
@@ -392,6 +473,29 @@ export const SlotView: React.FC<ISlotView> = ({
             <div className={styles.slotView_container}>
                 <div className={styles.slotView_container_slot}>
                     <img src={ClipGaming || '/placeholder.svg'} alt='clipGaming' />
+                    {selectedBonus === EBonuses.RAID && (
+                        <div className={styles.slotView_container_slot_header}>
+                            <div className={styles.wildCounter}>
+                                <p>WILDS</p>
+                                <span>{wildCount}</span>
+                            </div>
+                            <div>
+                                <p>MULTIPLIER</p>
+                                <span>{muiltiplerCount} X</span>
+                            </div>
+                        </div>
+                    )}
+                    {selectedBonus === EBonuses.RAID && (
+                        <div className={styles.slotView_container_slot_right}>
+                            {Array.from({ length: 3 }, (_, index) =>
+                                index < lives ? (
+                                    <img key={index} src={Gold || '/placeholder.svg'} alt='gold' />
+                                ) : (
+                                    <div key={index}/>
+                                ),
+                            )}
+                        </div>
+                    )}
                     <div className={styles.slotView_container_slot_game} ref={gameContainerRef}>
                         <div className={styles.game}>
                             <div className={styles.reelsContainer}>
@@ -428,31 +532,33 @@ export const SlotView: React.FC<ISlotView> = ({
                             </div>
 
                             {/* Static wild symbols that stay in place */}
-                            {wildPositions.map((wild, index) => (
-                                <div
-                                    key={`static-wild-${index}`}
-                                    className={styles.staticWild}
-                                    style={{
-                                        position: 'absolute',
-                                        left: `${wild.x}px`,
-                                        top: `${wild.y}px`,
-                                        width: '180px',
-                                        height: '180px',
-                                        zIndex: 100,
-                                        pointerEvents: 'none',
-                                    }}
-                                >
-                                    <img
-                                        src='/static/media/wild.4d06ca8c9b6b5c911465.png'
-                                        alt='Wild'
+                            {selectedBonus !== EBonuses.RAID &&
+                                wildPositions.map((wild, index) => (
+                                    <div
+                                        key={`static-wild-${index}`}
+                                        className={styles.staticWild}
                                         style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            objectFit: 'contain',
+                                            position: 'absolute',
+                                            left: `${wild.x}px`,
+                                            top: `${wild.y}px`,
+                                            width: '180px',
+                                            height: '180px',
+                                            zIndex: 100,
+                                            pointerEvents: 'none',
                                         }}
-                                    />
-                                </div>
-                            ))}
+                                    >
+                                        <img
+                                            src='/static/media/wild.236c3e29b77d5579c87e.png'
+                                            alt='Wild'
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'contain',
+                                            }}
+                                        />
+                                    </div>
+                                ))}
+
                             {expandingElements.map((item, index) => {
                                 // Set up the video ref
                                 if (videoRefs.current.length <= index) {
@@ -506,6 +612,40 @@ export const SlotView: React.FC<ISlotView> = ({
                     </div>
                 </div>
             </div>
+            {selectedBonus === EBonuses.RAID &&
+                wildPositions.map((wild, index) => {
+                    return (
+                        <img
+                            src={STAR}
+                            alt='star'
+                            className={styles.star}
+                            key={index}
+                            style={{
+                                position: 'absolute',
+                                left: `${wild.x + 90}px`,
+                                top: `${wild.y + 90}px`,
+                                zIndex: 99,
+                            }}
+                        />
+                    );
+                })}
+            {selectedBonus === EBonuses.RAID &&
+                raidPositions.map((raid, index) => {
+                    return (
+                        <img
+                            src={STAR}
+                            alt='star'
+                            className={styles.raid}
+                            key={index}
+                            style={{
+                                position: 'absolute',
+                                left: `${raid.x + 90}px`,
+                                top: `${raid.y + 90}px`,
+                                zIndex: 99,
+                            }}
+                        />
+                    );
+                })}
         </div>
     );
 };

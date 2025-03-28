@@ -84,8 +84,6 @@ export const TotalWin: React.FC<ITotalWin> = ({ totalWin, setSelectedBonus }) =>
     }
   }, []) // Empty dependency array means this runs once on mount
 
-  console.log("fontSize", fontSize)
-
   useEffect(() => {
     const totalWinElement:HTMLDivElement = document.querySelector(`.${styles.totalWin_amount}`)!;
     if (totalWinElement) {
@@ -100,7 +98,7 @@ export const TotalWin: React.FC<ITotalWin> = ({ totalWin, setSelectedBonus }) =>
         className={styles.totalWin_video}
         loop
         muted
-        onPlay={stopAllVideosAndPlayThis} // Also stop others when user manually plays
+        onPlay={stopAllVideosAndPlayThis} 
       >
         <source src={video} type="video/mp4" />
         Your browser does not support the video tag.

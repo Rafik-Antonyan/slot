@@ -26,6 +26,9 @@ import CleanBonusChair from './clean_bonus.png';
 import CleanGoldenChip from './clean_golden_chip.png';
 import CleanRaid from './clean_raid.png';
 import GrayChip from './gray_chip.png';
+import Gold from './gold.png';
+import Star from './star.png';
+import MultipleFrame from './multiple_frame.png';
 
 export {
     BgImage,
@@ -36,8 +39,10 @@ export {
     BuyBonus,
     ClipGaming,
     GoldenChip,
+    Gold,
     GreenChip,
     Man,
+    Star,
     Man2,
     Man3,
     MenuButton,
@@ -56,4 +61,5 @@ export {
     CleanGoldenChip,
     CleanRaid,
     GrayChip,
+    MultipleFrame,
 };

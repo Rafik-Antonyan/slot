@@ -11,17 +11,21 @@ interface IBonusSlot {
 }
 
 export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonus }) => {
-    const [freeSpins, setFreeSpins] = useState<number>(10);
+    const [freeSpins, setFreeSpins] = useState<number>(selectedBonus === EBonuses.RAID ? 3 : 10);
     const [totalWin, setTotalWin] = useState<number>(0);
     const [isResult, setIsResult] = useState<boolean>(false);
 
     useEffect(() => {
-        if(!freeSpins){
-            setTimeout(() => {
-                setIsResult(true)
-            }, 3300)
+        if (!freeSpins) {
+            if(selectedBonus !== EBonuses.RAID){
+                setTimeout(() => {
+                    setIsResult(true);
+                }, 3300);
+            }else{
+                setIsResult(true);
+            }
         }
-    },[freeSpins])
+    }, [freeSpins]);
 
     return (
         <div className={styles.bonusSlot}>

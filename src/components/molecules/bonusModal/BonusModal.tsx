@@ -79,7 +79,7 @@ export const BonusModal: React.FC<IBonusModal> = ({ setIsOpenBonuses, setSelecte
                             />
                             <div className={styles.bonusModal_confirm_text}>
                                 <p>{BONUS_DETAILS[unconfirmedBonus].title}</p>
-                                <span>${(bet * 10).toFixed(2)}</span>
+                                <span>${(bet * BONUS_DETAILS[unconfirmedBonus].multiple).toFixed(2)}</span>
                                 <p className={styles.info_text}>
                                     Will be substructed from your balance
                                 </p>
