@@ -30,6 +30,7 @@ import Gold from './gold.png';
 import ExtraGold from './extra_gold.png';
 import Star from './star.png';
 import MultipleFrame from './multiple_frame.png';
+import NewGoldChip from './new_gold_chip.png';
 
 export {
     BgImage,
@@ -43,6 +44,7 @@ export {
     Gold,
     ExtraGold,
     GreenChip,
+    NewGoldChip,
     Man,
     Star,
     Man2,

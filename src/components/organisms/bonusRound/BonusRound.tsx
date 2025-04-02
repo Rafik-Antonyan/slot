@@ -3,7 +3,14 @@ import { EBonuses } from 'utils/types/slotActions';
 import { BonusInfo } from 'components/molecules/bonusInfo/BonusInfo';
 import { BonusSlot } from 'components/molecules/bonusSlot/BonusSlot';
 import ROULETTE from '../../../assets/mp4/roulette.mp4';
+import CHAIT from '../../../assets/mp4/chair_animation.mp4';
 import styles from './bonusRound.module.scss';
+
+const BONUS_VIDEO = {
+    [EBonuses.GOLDEN]: ROULETTE,
+    [EBonuses.INTERROGATION]: CHAIT,
+    [EBonuses.RAID]: ROULETTE,
+}
 
 interface IBonusRound {
     selectedBonus: EBonuses;
@@ -11,12 +18,13 @@ interface IBonusRound {
 }
 
 export const BonusRound: React.FC<IBonusRound> = ({ selectedBonus, setSelectedBonus }) => {
-    const [step, setStep] = useState<number>(2);
+    const [step, setStep] = useState<number>(0);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
         if (step === 1 && videoRef.current) {
+            videoRef.current.style.filter = 'blur(0px)';
             videoRef.current.play();
         }
     }, [step]);
@@ -41,7 +49,7 @@ export const BonusRound: React.FC<IBonusRound> = ({ selectedBonus, setSelectedBo
         <div className={styles.bonusRound} onClick={() => step === 0 && setStep(1)}>
             {
                 {
-                    0: <BonusInfo />,
+                    0: <BonusInfo selectedBonus={selectedBonus}/>,
                     2: (
                         <BonusSlot
                             selectedBonus={selectedBonus}
@@ -52,7 +60,7 @@ export const BonusRound: React.FC<IBonusRound> = ({ selectedBonus, setSelectedBo
             }
             <video
                 ref={videoRef}
-                src={ROULETTE}
+                src={BONUS_VIDEO[selectedBonus]}
                 className={styles.video}
                 onEnded={handleVideoEnd}
                 playsInline

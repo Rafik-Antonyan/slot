@@ -141,7 +141,7 @@ export const SlotView: React.FC<ISlotView> = ({
         spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
         spinTimeoutsRef.current = [];
 
-        const generatedData = viewGenerator(4, 5, !isExtraRound);
+        const generatedData = viewGenerator(4, 5, (!isExtraRound && selectedBonus === EBonuses.RAID));
 
         setIsSpinning(true);
         setSpinningColumns([true, true, true, true, true]);

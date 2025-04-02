@@ -1,20 +1,39 @@
 import React from 'react';
-import { CleanGoldenChip } from 'assets/png';
+import { CleanBonusChair, CleanRaid, NewGoldChip } from 'assets/png';
+import { EBonuses } from 'utils/types/slotActions';
 import styles from './bonusInfo.module.scss';
 
-export const BonusInfo: React.FC = () => {
+interface IBonusInfo {
+    selectedBonus: EBonuses;
+}
+
+const BONUS_INFO = {
+    [EBonuses.GOLDEN]: {
+        title: 'GOLDEN CHIP',
+        description:
+            '10 Free spins with sticky wilds. The wilds will remain sticky for the duration of the bonus round.',
+        image: NewGoldChip,
+    },
+    [EBonuses.INTERROGATION]: {
+        title: 'INTERROGATION',
+        description: 'Expanding Wild symbol that turns the reel into a multiplier of up to 100x',
+        image: CleanBonusChair,
+    },
+    [EBonuses.RAID]: {
+        title: 'RAID',
+        description:
+            '10 Free spins with sticky wilds. The wilds will remain sticky for the duration of the bonus round.',
+        image: CleanRaid,
+    },
+};
+
+export const BonusInfo: React.FC<IBonusInfo> = ({ selectedBonus }) => {
     return (
         <div className={styles.bonusInfo}>
-            <img src={CleanGoldenChip} alt='bonus' />
-            <div className={styles.bonusInfo_container}>
-                <h3>GOLDEN CHIP</h3>
-                <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus,
-                    tempora reiciendis voluptatibus sunt quasi similique qui animi asperiores
-                    excepturi exercitationem tempore voluptatum nobis deleniti nisi, iure deserunt
-                    nostrum sapiente dicta!
-                </p>
-            </div>
+            <span>CONGRATULATIONS</span>
+            <h3>{BONUS_INFO[selectedBonus].title}</h3>
+            <img src={BONUS_INFO[selectedBonus].image} alt='bonus' />
+            <p className={styles.bonusInfo_desc}>{BONUS_INFO[selectedBonus].description}</p>
             <p>Click to continue!</p>
         </div>
     );
