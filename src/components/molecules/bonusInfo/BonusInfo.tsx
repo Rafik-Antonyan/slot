@@ -22,7 +22,7 @@ const BONUS_INFO = {
     [EBonuses.RAID]: {
         title: 'RAID',
         description:
-            '10 Free spins with sticky wilds. The wilds will remain sticky for the duration of the bonus round.',
+            'Accumulate Wilds and Multipliers for the ultimate raid, over 3 spins.',
         image: CleanRaid,
     },
 };

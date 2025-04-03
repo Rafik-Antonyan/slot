@@ -13,6 +13,19 @@ import {
     Women,
     GrayChip,
 } from 'assets/png';
+import { EBonuses } from 'utils/types/slotActions';
+
+const ITEMS_WITHOUT_BONUS: string[] = [
+    BlueChip,
+    GreenChip,
+    PurpleChip,
+    RedChip,
+    Wild,
+    Man,
+    Man2,
+    Man3,
+    Women,
+];
 
 const ITEM_LIST: string[] = [
     BlueChip,
@@ -95,4 +108,25 @@ export const viewGenerator = (raws: number, cols: number, withGrayCips?: boolean
     return Array.from({ length: raws }, () =>
         Array.from({ length: cols }, () => ITEM_LIST[Math.floor(Math.random() * ITEM_LIST.length)]),
     );
+};
+
+const BONUS_INITIAL_VIEW = {
+    [EBonuses.GOLDEN]: Array.from({ length: 3 }, () => GoldenChip),
+    [EBonuses.INTERROGATION]: Array.from({ length: 3 }, () => BonusChair),
+    [EBonuses.RAID]: Array.from({ length: 3 }, () => Raid),
+};
+
+export const generateInitialBonusview = (view: string[][], selectedBonus: EBonuses): string[][] => {
+    const generatedBonusArray: string[] = Array.from(
+        { length: 17 },
+        () => ITEMS_WITHOUT_BONUS[Math.floor(Math.random() * ITEMS_WITHOUT_BONUS.length)],
+    );
+    generatedBonusArray.push(...BONUS_INITIAL_VIEW[selectedBonus]);
+    generatedBonusArray.sort(() => Math.random() - 0.5);
+    const finalView: string[][] = Array.from({ length: 5 }, (_, i) =>
+        generatedBonusArray.slice(i * 4, (i + 1) * 4),
+    );
+    const initialBonusview = view.map((row, index) => [...finalView[index], ...row.slice(4)]);
+    
+    return initialBonusview;
 };

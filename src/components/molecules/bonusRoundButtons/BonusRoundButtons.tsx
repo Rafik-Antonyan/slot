@@ -29,7 +29,7 @@ export const BonusRoundButtons: React.FC<IBonusRoundButtons> = ({ freeSpins, tot
                 </div>
                 <div className={styles.infoBlock}>
                     <p>{freeSpins === 0 && typeof extraSpins === 'number' ? "EXTRA" : "FREE"} SPINS</p>
-                    <span>{freeSpins || extraSpins}</span>
+                    <span>{freeSpins || extraSpins || 0}</span>
                 </div>
             </div>
         </div>

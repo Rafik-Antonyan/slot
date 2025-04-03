@@ -8,21 +8,25 @@ import styles from './bonusSlot.module.scss';
 interface IBonusSlot {
     selectedBonus: EBonuses;
     setSelectedBonus: React.Dispatch<React.SetStateAction<EBonuses | null>>;
+    setIsDoneInitialSpin?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonus }) => {
+export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonus, setIsDoneInitialSpin }) => {
     const [freeSpins, setFreeSpins] = useState<number>(selectedBonus === EBonuses.RAID ? 3 : 10);
     const [totalWin, setTotalWin] = useState<number>(0);
     const [isResult, setIsResult] = useState<boolean>(false);
     const [extraSpins, setExtraSpins] = useState<number>(3);
 
-    console.log('extraSpins', extraSpins);
     useEffect(() => {
         if (!freeSpins) {
-            if (selectedBonus !== EBonuses.RAID) {
+            if (selectedBonus === EBonuses.GOLDEN) {
                 setTimeout(() => {
                     setIsResult(true);
                 }, 3300);
+            } else if(selectedBonus === EBonuses.INTERROGATION){
+                setTimeout(() => {
+                    setIsResult(true);
+                }, 5000);
             }
         }
         if (!extraSpins && selectedBonus === EBonuses.RAID) {
@@ -31,6 +35,14 @@ export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonu
             }, 3300);
         }
     }, [freeSpins, extraSpins]);
+
+    useEffect(() => {
+        if(isResult){
+            setTimeout(() => {
+                setIsDoneInitialSpin && setIsDoneInitialSpin(false);
+            }, 3000);
+        }
+    },[isResult])
 
     return (
         <div className={styles.bonusSlot}>

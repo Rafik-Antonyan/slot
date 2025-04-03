@@ -88,7 +88,10 @@ export const BonusModal: React.FC<IBonusModal> = ({ setIsOpenBonuses, setSelecte
                                 <Button children='BACK' onClick={() => setUnconfirmedBonus(null)} />
                                 <Button
                                     children='OK'
-                                    onClick={() => setSelectedBonus(unconfirmedBonus)}
+                                    onClick={() => {
+                                        setSelectedBonus(unconfirmedBonus)
+                                        setIsOpenBonuses(false)
+                                    }}
                                 />
                             </div>
                         </div>

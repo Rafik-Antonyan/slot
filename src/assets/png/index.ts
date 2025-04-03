@@ -1,4 +1,3 @@
-import BgImage from './bg_image.png';
 import Arrow from './arrow.png';
 import AutoBonus from './auto_bonus.png';
 import BlueChip from './blue_chip.png';
@@ -33,7 +32,6 @@ import MultipleFrame from './multiple_frame.png';
 import NewGoldChip from './new_gold_chip.png';
 
 export {
-    BgImage,
     Arrow,
     AutoBonus,
     BlueChip,
