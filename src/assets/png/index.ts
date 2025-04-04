@@ -32,8 +32,22 @@ import MultipleFrame from './multiple_frame.png';
 import NewGoldChip from './new_gold_chip.png';
 import MMM from './mmm.png';
 import Text from './text.png';
+import Miltiple from './multiple.png';
+import MobileBg from './mobile_bg.png';
+import MobileCharacter from './mobile_character.png';
+import MobileLoading from './mobile_loading.png';
+import MobileGolden from './clean_golden_mobile.png';
+import MobileI from './clean_i_mobile.png';
+import MobileRaid from './clean_raid_mobile.png';
+import BonusFeatures from './bonus_features.png';
+import MMMMobile from './mmm_mobile.png';
 
 export {
+    BonusFeatures,
+    MobileLoading,
+    MobileBg,
+    MobileCharacter,
+    Miltiple,
     Arrow,
     AutoBonus,
     BlueChip,
@@ -57,6 +71,7 @@ export {
     SlotFrame,
     Spin,
     SpinAgain,
+    MMMMobile,
     Wild,
     Women,
     GameDescription,
@@ -68,4 +83,7 @@ export {
     MultipleFrame,
     MMM,
     Text,
+    MobileGolden,
+    MobileI,
+    MobileRaid,
 };

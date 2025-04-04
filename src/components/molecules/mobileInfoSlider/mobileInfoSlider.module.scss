@@ -1,0 +1,44 @@
+.mobileInfoSlider {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+
+    & > img {
+        width: 320px;
+    }
+
+    &_blur {
+        background-image: url('../../../assets/png/mobile_bg.png');
+        background-size: 100% 100%;
+        position: absolute;
+        z-index: -1;
+        top: -10%;
+        left: -10%;
+        width: 120%;
+        height: 120%;
+        filter: blur(10px);
+    }
+
+    span{
+        font-size: 28px;
+        line-height: 28px;
+        font-weight: 600;
+        color: #D9D9D9;
+        position: absolute;
+        bottom: 80px;
+    }
+}
+
+.swiper {
+    width: 100vw;
+    margin-top: -80px;
+}
+
+.swiper_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

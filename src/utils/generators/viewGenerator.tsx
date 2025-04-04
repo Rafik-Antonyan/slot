@@ -15,6 +15,12 @@ import {
 } from 'assets/png';
 import { EBonuses } from 'utils/types/slotActions';
 
+const BONUS_SYMBOLS = {
+    [EBonuses.GOLDEN]: GoldenChip,
+    [EBonuses.INTERROGATION]: BonusChair,
+    [EBonuses.RAID]: Raid,
+};
+
 const ITEMS_WITHOUT_BONUS: string[] = [
     BlueChip,
     GreenChip,
@@ -42,9 +48,21 @@ const ITEM_LIST: string[] = [
     Raid,
 ];
 
+const BONUS_ITEM_LIST: string[] = [
+    BlueChip,
+    GreenChip,
+    PurpleChip,
+    Wild,
+    RedChip,
+    Man,
+    Man2,
+    Man3,
+    Women,
+];
+
 const RAID_ITEM_LIST: string[] = [
     // Wild,
-    // Raid,
+    // Miltiple,
     GrayChip,
     GrayChip,
     GrayChip,
@@ -95,12 +113,30 @@ const RAID_ITEM_LIST: string[] = [
     GrayChip,
 ];
 
-export const viewGenerator = (raws: number, cols: number, withGrayCips?: boolean): string[][] => {
+export const viewGenerator = (
+    raws: number,
+    cols: number,
+    selectedRound?: EBonuses | null,
+    withGrayCips?: boolean,
+): string[][] => {
+    if (selectedRound) {
+        BONUS_ITEM_LIST.push(BONUS_SYMBOLS[selectedRound]);
+    }
+
     if (withGrayCips) {
         return Array.from({ length: raws }, () =>
             Array.from(
                 { length: cols },
                 () => RAID_ITEM_LIST[Math.floor(Math.random() * RAID_ITEM_LIST.length)],
+            ),
+        );
+    }
+
+    if (selectedRound) {
+        return Array.from({ length: raws }, () =>
+            Array.from(
+                { length: cols },
+                () => BONUS_ITEM_LIST[Math.floor(Math.random() * BONUS_ITEM_LIST.length)],
             ),
         );
     }
@@ -127,6 +163,6 @@ export const generateInitialBonusview = (view: string[][], selectedBonus: EBonus
         generatedBonusArray.slice(i * 4, (i + 1) * 4),
     );
     const initialBonusview = view.map((row, index) => [...finalView[index], ...row.slice(4)]);
-    
+
     return initialBonusview;
 };

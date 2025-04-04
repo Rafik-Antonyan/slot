@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useEffect, useState, useRef } from 'react';
-import { ClipGaming, ExtraGold, Gold, Wild } from 'assets/png';
+import { ClipGaming, ExtraGold, Gold, Raid, Wild } from 'assets/png';
 import { generateInitialBonusview, viewGenerator } from 'utils/generators/viewGenerator';
 import { EBonuses, ESlotActions } from 'utils/types/slotActions';
 import HANDS_VIDEO from '../../../assets/mp4/hands.mp4';
@@ -95,20 +95,23 @@ export const SlotView: React.FC<ISlotView> = ({
 
     // Clean up timeouts on unmount
     useEffect(() => {
-        const handleResize = () => {
-            setBoxSize(window.innerWidth > 1600 ? 200 : 100);
-        };
-
-        window.addEventListener('resize', handleResize);
-
         return () => {
             spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
-            window.removeEventListener('resize', handleResize);
             if (freeSpinTimeoutRef.current) {
                 clearTimeout(freeSpinTimeoutRef.current);
             }
         };
     }, []);
+
+    useEffect(() => {
+        if (window.innerWidth > 1919) {
+            setBoxSize(200);
+        } else if (window.innerWidth > 1440) {
+            setBoxSize(175);
+        } else if (window.innerWidth > 1024) {
+            setBoxSize(150);
+        }
+    }, [window.innerWidth]);
 
     useEffect(() => {
         if (
@@ -148,7 +151,7 @@ export const SlotView: React.FC<ISlotView> = ({
         spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
         spinTimeoutsRef.current = [];
 
-        const generatedData = viewGenerator(4, 5, !isExtraRound && selectedBonus === EBonuses.RAID);
+        const generatedData = viewGenerator(4, 5, selectedBonus, !isExtraRound && selectedBonus === EBonuses.RAID);
 
         setIsSpinning(true);
         setSpinningColumns([true, true, true, true, true]);
@@ -298,7 +301,7 @@ export const SlotView: React.FC<ISlotView> = ({
         for (let column = 0; column < finalResult.length; column++) {
             for (let row = 0; row < 4; row++) {
                 // Always check first 4 rows
-                if (finalResult[column]?.[row] === '/static/media/wild.236c3e29b77d5579c87e.png') {
+                if (finalResult[column]?.[row] === Wild) {
                     const key = `${column}-${row}`;
 
                     // Only add if this wild is not already tracked
@@ -322,9 +325,7 @@ export const SlotView: React.FC<ISlotView> = ({
                             });
                         }
                     }
-                } else if (
-                    finalResult[column]?.[row] === '/static/media/raid.8b9b22c22b62c052518a.png'
-                ) {
+                } else if (finalResult[column]?.[row] === Raid) {
                     const key = `${column}-${row}`;
 
                     // Only add if this wild is not already tracked
@@ -371,7 +372,7 @@ export const SlotView: React.FC<ISlotView> = ({
         for (let column = 0; column < finalResult.length; column++) {
             for (let row = 0; row < 4; row++) {
                 // Check for wild symbols
-                if (finalResult[column]?.[row] === '/static/media/wild.236c3e29b77d5579c87e.png') {
+                if (finalResult[column]?.[row] === Wild) {
                     // Find the element position
                     const slotItemElement = document.querySelector(
                         `.${styles.reelColumn}:nth-child(${column + 1}) .${styles.slotItem}:nth-child(${row + 1})`,
@@ -403,12 +404,7 @@ export const SlotView: React.FC<ISlotView> = ({
                 }
             }
         }
-        if (
-            finalResult
-                .flat(Number.POSITIVE_INFINITY)
-                .includes('/static/media/wild.236c3e29b77d5579c87e.png') &&
-            freeSpins! > 0
-        ) {
+        if (finalResult.flat(Number.POSITIVE_INFINITY).includes(Wild) && freeSpins! > 0) {
             setTimeout(() => {
                 setExpandingElements([]);
                 handleSpin();
@@ -424,18 +420,14 @@ export const SlotView: React.FC<ISlotView> = ({
         if (!finalResult.length || !freeSpins) return;
 
         capturePositions();
-        const wildsInResult = finalResult
-            .flat()
-            .filter((symbol) => symbol === '/static/media/wild.236c3e29b77d5579c87e.png').length;
+        const wildsInResult = finalResult.flat().filter((symbol) => symbol === Wild).length;
 
         if (wildsInResult > 0) {
             setTimeout(() => {
                 setWildCount((prev) => prev + wildsInResult);
             }, 500);
         }
-        const raidsInResult = finalResult
-            .flat()
-            .filter((symbol) => symbol === '/static/media/raid.8b9b22c22b62c052518a.png').length;
+        const raidsInResult = finalResult.flat().filter((symbol) => symbol === Raid).length;
 
         if (raidsInResult > 0) {
             setTimeout(() => {
@@ -590,8 +582,8 @@ export const SlotView: React.FC<ISlotView> = ({
                                             position: 'absolute',
                                             left: `${wild.x}px`,
                                             top: `${wild.y}px`,
-                                            width: '180px',
-                                            height: '180px',
+                                            width: `${boxSize - 20}px`,
+                                            height: `${boxSize - 20}px`,
                                             zIndex: 100,
                                             pointerEvents: 'none',
                                         }}
@@ -621,9 +613,9 @@ export const SlotView: React.FC<ISlotView> = ({
                                         style={{
                                             position: 'absolute',
                                             overflow: 'hidden',
-                                            left: `${item.column * boxSize + 10}px`, // Adjust based on your slot width
+                                            left: `${(item.column * (boxSize + (boxSize !== 200 ? 5 : 0))) + 10}px`, // Adjust based on your slot width
                                             top: `${item.startY - 20}px`,
-                                            width: '180px',
+                                            width: `${boxSize - 15}px`,
                                             height: `${item.height}px`,
                                             backgroundColor: '#1e1e1e',
                                             zIndex: 90, // Below the wild symbols

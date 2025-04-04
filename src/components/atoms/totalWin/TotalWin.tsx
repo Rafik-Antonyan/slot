@@ -11,7 +11,7 @@ interface ITotalWin {
 
 export const TotalWin: React.FC<ITotalWin> = ({ totalWin, setSelectedBonus }) => {
   const [displayValue, setDisplayValue] = useState(0)
-  const [fontSize, setFontSize] = useState(48)
+  const [fontSize, setFontSize] = useState(70)
   const videoRef = useRef<HTMLVideoElement>(null)
 
   // Custom hook for the counting animation
@@ -29,7 +29,7 @@ export const TotalWin: React.FC<ITotalWin> = ({ totalWin, setSelectedBonus }) =>
         const currentValue = Math.floor(progress * targetValue)
         setDisplayValue(currentValue)
 
-        const currentFontSize = 48 + 48 * progress
+        const currentFontSize = 70 + 70 * progress
         setFontSize(currentFontSize)
 
         if (progress < 1) {
@@ -70,7 +70,7 @@ export const TotalWin: React.FC<ITotalWin> = ({ totalWin, setSelectedBonus }) =>
   }
 
   // Use our custom animation hook
-  useFadeIn(totalWin, totalWin > 100 ? 5000 : 2000)
+  useFadeIn(totalWin, 5000)
 
   // Effect to handle video playback when component mounts
   useEffect(() => {

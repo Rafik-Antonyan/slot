@@ -35,9 +35,9 @@ export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonu
             }, 3300);
         }
     }, [freeSpins, extraSpins]);
-
+    
     useEffect(() => {
-        if(isResult){
+        if(isResult && selectedBonus === EBonuses.RAID){
             setTimeout(() => {
                 setIsDoneInitialSpin && setIsDoneInitialSpin(false);
             }, 3000);
