@@ -7,8 +7,10 @@ import { BonusModal } from 'components/molecules/bonusModal/BonusModal';
 import { Modal } from 'components/molecules/modal/Modal';
 import { BonusRound } from 'components/organisms/bonusRound/BonusRound';
 import myVideo from '../../../assets/mp4/main_interface.mp4';
-import styles from './slot.module.scss';
 import { MMM } from 'assets/png';
+import styles from './slot.module.scss';
+
+const PERSONAGE_TEXTS:string[] = ["Nope, the win’s going to someone else", "You Suck", "Ever think that maybe this slow doesnt like you", "If Bad Luck was a profession, you’d be an expert"]
 
 export const Slot: React.FC = () => {
     const [action, setAction] = useState<ESlotActions>(ESlotActions.PAUSE);
@@ -16,6 +18,7 @@ export const Slot: React.FC = () => {
     const [selectedBonus, setSelectedBonus] = useState<EBonuses | null>(null);
     const [isDoneInitialSpin, setIsDoneInitialSpin] = useState<boolean>(false);
     const [showText, setShowText] = useState<boolean>(false);
+    const [text, setText] = useState<string>('');
     const [slotData, setSlotData] = useState<ISlotData>({
         betValue: 1,
         balance: 4000,
@@ -26,6 +29,7 @@ export const Slot: React.FC = () => {
     useEffect(() => {
         if (action === ESlotActions.PAUSE) {
             if (hasPausedOnce.current && videoRef.current) {
+                setText(PERSONAGE_TEXTS[Math.floor(Math.random() * 4)])
                 setTimeout(() => {
                     videoRef.current!.play();
                     setShowText(true);
@@ -95,7 +99,7 @@ export const Slot: React.FC = () => {
                         style={showText ? { opacity: 1 } : { opacity: 0 }}
                     >
                         <div>
-                            <p>Nope, the win’s going to someone else</p>
+                            <p>{text}</p>
                         </div>
                         <img src={MMM} alt='mmm' />
                     </div>
