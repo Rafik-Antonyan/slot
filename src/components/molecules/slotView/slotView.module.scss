@@ -1,3 +1,5 @@
+@import '../../../styles/breakPoints.scss';
+
 .slotView {
     width: 100%;
     height: 100%;
@@ -10,6 +12,14 @@
         width: 1074px;
         height: 100%;
         padding-top: 40px;
+
+        @include respond-to(2xl){
+            width: 974px;
+        }
+
+        @include respond-to(xl){
+            width: 874px;
+        }
 
         &_slot {
             display: flex;
@@ -34,6 +44,14 @@
                 width: 100%;
                 height: 834px;
                 padding: 17px;
+
+                @include respond-to(2xl){
+                    height: 734px;
+                }
+
+                @include respond-to(xl){
+                    height: 634px;
+                }
 
                 & > .game {
                     background-color: #1e1e1e;
@@ -74,6 +92,14 @@
                                 z-index: 2;
                             }
                         }
+
+                        @include respond-to(2xl){
+                            width: 175px;
+                        }
+
+                        @include respond-to(xl){
+                            width: 150px;
+                        }
                     }
 
                     .reel {
@@ -92,6 +118,16 @@
                             width: 100%;
                             height: 100%;
                             object-fit: cover;
+                        }
+
+                        @include respond-to(2xl){
+                            width: 155px;
+                            height: 155px;
+                        }
+
+                        @include respond-to(xl){
+                            width: 130px;
+                            height: 130px;
                         }
                     }
                 }

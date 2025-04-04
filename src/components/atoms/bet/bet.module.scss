@@ -1,4 +1,5 @@
 @import "./../../../styles/colors.scss";
+@import '../../../styles/breakPoints.scss';
 
 .bet {
     display: flex;
@@ -7,6 +8,16 @@
     padding: 16px 40px;
     border-radius: 80px;
     background-color: #130e14c4;
+
+    @include respond-to(2xl){
+        width: 223px;
+        padding: 12px 35px;
+    }
+
+    @include respond-to(xl){
+        width: 173px;
+        padding: 8px 30px;
+    }
 
     &_values {
         display: flex;
@@ -19,12 +30,32 @@
             font-size: 22px;
             line-height: 28px;
             font-weight: 600;
+
+            @include respond-to(2xl){
+                font-size: 20px;
+                line-height: 24px;
+            }
+        
+            @include respond-to(xl){
+                font-size: 18px;
+                line-height: 20px;
+            }
         }
 
         span {
             font-size: 32px;
             font-weight: bold;
             line-height: 28px;
+
+            @include respond-to(2xl){
+                font-size: 28px;
+                line-height: 25px;
+            }
+        
+            @include respond-to(xl){
+                font-size: 24px;
+                line-height: 22px;
+            }
         }
     }
 
@@ -36,6 +67,16 @@
         img{
             height: 36px !important;
             width: 52px !important;
+
+            @include respond-to(2xl){
+                height: 28px !important;
+                width: 40px !important;
+            }
+        
+            @include respond-to(xl){
+                height: 20px !important;
+                width: 28px !important;
+            }
 
             &:last-child{
                 transform: rotate(180deg);

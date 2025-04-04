@@ -1,5 +1,3 @@
-'use client';
-
 import type React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import { ClipGaming, ExtraGold, Gold, Wild } from 'assets/png';
@@ -42,6 +40,7 @@ export const SlotView: React.FC<ISlotView> = ({
     setExtraSpins,
 }) => {
     const [isSpinning, setIsSpinning] = useState<boolean>(false);
+    const [boxSize, setBoxSize] = useState<number>(200);
     const [spinningColumns, setSpinningColumns] = useState<boolean[]>([
         false,
         false,
@@ -96,15 +95,21 @@ export const SlotView: React.FC<ISlotView> = ({
 
     // Clean up timeouts on unmount
     useEffect(() => {
+        const handleResize = () => {
+            setBoxSize(window.innerWidth > 1600 ? 200 : 100);
+        };
+
+        window.addEventListener('resize', handleResize);
+
         return () => {
             spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
+            window.removeEventListener('resize', handleResize);
             if (freeSpinTimeoutRef.current) {
                 clearTimeout(freeSpinTimeoutRef.current);
             }
         };
     }, []);
 
-    // Trigger next free spin when current spin completes
     useEffect(() => {
         if (
             freeSpins &&
@@ -112,9 +117,7 @@ export const SlotView: React.FC<ISlotView> = ({
             !isSpinning &&
             !(
                 selectedBonus === EBonuses.INTERROGATION &&
-                finalResult
-                    .flat(Number.POSITIVE_INFINITY)
-                    .includes(Wild)
+                finalResult.flat(Number.POSITIVE_INFINITY).includes(Wild)
             ) &&
             !(selectedBonus === EBonuses.RAID && freeSpins === 1)
         ) {
@@ -145,8 +148,8 @@ export const SlotView: React.FC<ISlotView> = ({
         spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
         spinTimeoutsRef.current = [];
 
-        const generatedData = viewGenerator(4, 5, (!isExtraRound && selectedBonus === EBonuses.RAID));
-        
+        const generatedData = viewGenerator(4, 5, !isExtraRound && selectedBonus === EBonuses.RAID);
+
         setIsSpinning(true);
         setSpinningColumns([true, true, true, true, true]);
 
@@ -165,11 +168,11 @@ export const SlotView: React.FC<ISlotView> = ({
                 return reel;
             });
 
-        if(selectedBonus && isDoneInitialSpin === false){
+        if (selectedBonus && isDoneInitialSpin === false) {
             newReels = generateInitialBonusview(newReels, selectedBonus);
             setSelectedBonus!(null);
         }
-            
+
         setFinalResult(newReels.map((column) => column.slice(0, 4)));
         setReels(newReels);
 
@@ -177,7 +180,8 @@ export const SlotView: React.FC<ISlotView> = ({
             if (reelsRef.current[i]) {
                 // Reset the element
                 reelsRef.current[i].style.transition = 'none';
-                reelsRef.current[i].style.transform = `translateY(-${(REEL_LENGTH - 4) * 200}px)`;
+                reelsRef.current[i].style.transform =
+                    `translateY(-${(REEL_LENGTH - 4) * boxSize}px)`;
 
                 void reelsRef.current[i].offsetHeight;
 
@@ -200,7 +204,7 @@ export const SlotView: React.FC<ISlotView> = ({
                 styleEl.innerHTML = `
           @keyframes ${animationName} {
             0% {
-              transform: translateY(-${(REEL_LENGTH - 4) * 200}px);
+              transform: translateY(-${(REEL_LENGTH - 4) * boxSize}px);
             }
             90% {
               transform: translateY(20px); /* Overshoot by 10px */
@@ -402,7 +406,8 @@ export const SlotView: React.FC<ISlotView> = ({
         if (
             finalResult
                 .flat(Number.POSITIVE_INFINITY)
-                .includes('/static/media/wild.236c3e29b77d5579c87e.png') && freeSpins! > 0
+                .includes('/static/media/wild.236c3e29b77d5579c87e.png') &&
+            freeSpins! > 0
         ) {
             setTimeout(() => {
                 setExpandingElements([]);
@@ -413,7 +418,7 @@ export const SlotView: React.FC<ISlotView> = ({
     };
 
     const handleRaidBonus = () => {
-        if(freeSpins === 0){
+        if (freeSpins === 0) {
             setLives((prev) => prev - 1);
         }
         if (!finalResult.length || !freeSpins) return;
@@ -501,7 +506,11 @@ export const SlotView: React.FC<ISlotView> = ({
     return (
         <div
             className={styles.slotView}
-            style={selectedBonus && isDoneInitialSpin !== false ? { justifyContent: 'center', height: 'auto' } : {}}
+            style={
+                selectedBonus && isDoneInitialSpin !== false
+                    ? { justifyContent: 'center', height: 'auto' }
+                    : {}
+            }
         >
             <div className={styles.slotView_container}>
                 <div className={styles.slotView_container_slot}>
@@ -522,7 +531,13 @@ export const SlotView: React.FC<ISlotView> = ({
                         <div className={styles.slotView_container_slot_right}>
                             {Array.from({ length: 3 }, (_, index) =>
                                 index < lives ? (
-                                    <img key={index} src={freeSpins === 0 ? ExtraGold : Gold || '/placeholder.svg'} alt='gold' />
+                                    <img
+                                        key={index}
+                                        src={
+                                            freeSpins === 0 ? ExtraGold : Gold || '/placeholder.svg'
+                                        }
+                                        alt='gold'
+                                    />
                                 ) : (
                                     <div key={index} />
                                 ),
@@ -565,7 +580,8 @@ export const SlotView: React.FC<ISlotView> = ({
                             </div>
 
                             {/* Static wild symbols that stay in place */}
-                            {selectedBonus !== EBonuses.RAID && isDoneInitialSpin !== false &&
+                            {selectedBonus !== EBonuses.RAID &&
+                                isDoneInitialSpin !== false &&
                                 wildPositions.map((wild, index) => (
                                     <div
                                         key={`static-wild-${index}`}
@@ -605,7 +621,7 @@ export const SlotView: React.FC<ISlotView> = ({
                                         style={{
                                             position: 'absolute',
                                             overflow: 'hidden',
-                                            left: `${item.column * 200 + 10}px`, // Adjust based on your slot width
+                                            left: `${item.column * boxSize + 10}px`, // Adjust based on your slot width
                                             top: `${item.startY - 20}px`,
                                             width: '180px',
                                             height: `${item.height}px`,
@@ -645,7 +661,8 @@ export const SlotView: React.FC<ISlotView> = ({
                     </div>
                 </div>
             </div>
-            {selectedBonus === EBonuses.RAID && isDoneInitialSpin !== false &&
+            {selectedBonus === EBonuses.RAID &&
+                isDoneInitialSpin !== false &&
                 wildPositions.map((wild, index) => {
                     return (
                         <img
@@ -662,7 +679,8 @@ export const SlotView: React.FC<ISlotView> = ({
                         />
                     );
                 })}
-            {selectedBonus === EBonuses.RAID && isDoneInitialSpin !== false &&
+            {selectedBonus === EBonuses.RAID &&
+                isDoneInitialSpin !== false &&
                 raidPositions.map((raid, index) => {
                     return (
                         <img

@@ -1,6 +1,7 @@
-@import "./../../../styles/colors.scss";
+@import './../../../styles/colors.scss';
+@import '../../../styles/breakPoints.scss';
 
-.slotButtons{
+.slotButtons {
     height: 110px;
     width: 100%;
     display: flex;
@@ -9,44 +10,64 @@
     position: relative;
     z-index: 10;
 
-    img{
+    @include respond-to(2xl) {
+        height: 100px;
+    }
+
+    @include respond-to(xl) {
+        height: 90px;
+    }
+
+    img {
         width: 94px;
         height: 94px;
+        margin-top: 5px;
+
+        @include respond-to(2xl) {
+            width: 84px;
+            height: 84px;
+        }
+
+        @include respond-to(xl) {
+            width: 74px;
+            height: 74px;
+        }
+
         cursor: pointer;
 
-        &:hover{
+        &:hover {
             filter: grayscale(60%);
         }
     }
 
-    &_bonus{
+    &_bonus {
         display: flex;
         gap: 15px;
     }
 
-    &_play{
+    &_play {
         display: flex;
         justify-content: space-between;
         width: 100%;
         align-items: center;
 
-        &_balance{
+        &_balance {
             display: flex;
             gap: 50px;
             color: $white;
 
-            &>div{
+            & > div {
                 display: flex;
                 gap: 4px;
                 flex-direction: column;
 
-                p{
+                p {
                     font-size: 22px;
                     line-height: 28px;
                     font-weight: 600;
                 }
 
-                span{
+                span {
                     font-size: 32px;
                     font-weight: bold;
                     line-height: 28px;
@@ -54,13 +75,23 @@
             }
         }
 
-        &_spin{
+        &_spin {
             display: flex;
             align-items: center;
 
-            &>.spin{
+            & > .spin {
                 width: 146px;
                 height: 146px;
+
+                @include respond-to(2xl) {
+                    width: 126px;
+                    height: 126px;
+                }
+
+                @include respond-to(xl) {
+                    width: 106px;
+                    height: 106px;
+                }
             }
         }
     }
