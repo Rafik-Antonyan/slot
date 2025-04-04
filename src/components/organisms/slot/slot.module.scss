@@ -15,4 +15,42 @@
         top: 0;
         object-fit: inherit;
     }
+
+    &_text{
+        position: absolute;
+        top: 8%;
+        left: 3%;
+        width: 320px;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        transition: all 0.4s ease-in-out;
+
+        &>div{
+            background-image: url('../../../assets/png/text.png');
+            background-size: 100% 100%;
+            width: 100%;
+            height: 105px;  
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(-3deg);  
+
+            &>p{
+                font-size: 23px;
+                font-weight: bold;
+                line-height: 24px;
+                text-align: center;
+                text-transform: uppercase;
+                transform: rotate(3deg);  
+                padding: 0 30px;
+                padding-top: 5px;
+            }
+        }
+        &>img{
+            padding-left: 100px;
+        }
+    }
 }

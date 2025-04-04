@@ -8,28 +8,36 @@ import { Modal } from 'components/molecules/modal/Modal';
 import { BonusRound } from 'components/organisms/bonusRound/BonusRound';
 import myVideo from '../../../assets/mp4/main_interface.mp4';
 import styles from './slot.module.scss';
+import { MMM } from 'assets/png';
 
 export const Slot: React.FC = () => {
     const [action, setAction] = useState<ESlotActions>(ESlotActions.PAUSE);
     const [isOpenBonuses, setIsOpenBonuses] = useState<boolean>(false);
     const [selectedBonus, setSelectedBonus] = useState<EBonuses | null>(null);
     const [isDoneInitialSpin, setIsDoneInitialSpin] = useState<boolean>(false);
+    const [showText, setShowText] = useState<boolean>(false);
     const [slotData, setSlotData] = useState<ISlotData>({
         betValue: 1,
         balance: 4000,
     });
     const hasPausedOnce = useRef(false);
     const videoRef = useRef<HTMLVideoElement | null>(null);
-    
+
     useEffect(() => {
         if (action === ESlotActions.PAUSE) {
             if (hasPausedOnce.current && videoRef.current) {
-                videoRef.current.play();
+                setTimeout(() => {
+                    videoRef.current!.play();
+                    setShowText(true);
+                }, 2000);
+                setTimeout(() => {
+                    setShowText(false);
+                }, 4000);
             }
             hasPausedOnce.current = true;
         } else if (action === ESlotActions.BUY_BONUS) {
             setIsOpenBonuses(true);
-        } else if(action === ESlotActions.PLAY) {
+        } else if (action === ESlotActions.PLAY) {
             setAction(ESlotActions.PAUSE);
         }
     }, [action]);
@@ -37,27 +45,36 @@ export const Slot: React.FC = () => {
     useEffect(() => {
         if (selectedBonus && !isDoneInitialSpin) {
             setAction(ESlotActions.PLAY);
-            const bonus: EBonuses = selectedBonus
+            const bonus: EBonuses = selectedBonus;
             setTimeout(() => {
-                setIsDoneInitialSpin(true)
-            }, 3000)
+                setIsDoneInitialSpin(true);
+            }, 3000);
             setTimeout(() => {
-                setSelectedBonus(bonus)
-            }, 4000)
+                setSelectedBonus(bonus);
+            }, 4000);
         }
     }, [selectedBonus]);
 
     return (
         <div className={styles.slot}>
             {selectedBonus && isDoneInitialSpin ? (
-                <BonusRound selectedBonus={selectedBonus} setSelectedBonus={setSelectedBonus} setIsDoneInitialSpin={setIsDoneInitialSpin}/>
+                <BonusRound
+                    selectedBonus={selectedBonus}
+                    setSelectedBonus={setSelectedBonus}
+                    setIsDoneInitialSpin={setIsDoneInitialSpin}
+                />
             ) : (
                 <>
                     <video ref={videoRef} className={styles.slot_video}>
                         <source src={myVideo} type='video/mp4' />
                         Your browser does not support the video tag.
                     </video>
-                    <SlotView action={action} selectedBonus={selectedBonus} isDoneInitialSpin={isDoneInitialSpin} setSelectedBonus={setSelectedBonus}/>
+                    <SlotView
+                        action={action}
+                        selectedBonus={selectedBonus}
+                        isDoneInitialSpin={isDoneInitialSpin}
+                        setSelectedBonus={setSelectedBonus}
+                    />
                     <SlotButtons
                         setAction={setAction}
                         slotData={slotData}
@@ -73,6 +90,15 @@ export const Slot: React.FC = () => {
                         isOpen={isOpenBonuses}
                         onClose={() => setIsOpenBonuses(false)}
                     />
+                    <div
+                        className={styles.slot_text}
+                        style={showText ? { opacity: 1 } : { opacity: 0 }}
+                    >
+                        <div>
+                            <p>Nope, the win’s going to someone else</p>
+                        </div>
+                        <img src={MMM} alt='mmm' />
+                    </div>
                 </>
             )}
         </div>

@@ -30,6 +30,8 @@ import ExtraGold from './extra_gold.png';
 import Star from './star.png';
 import MultipleFrame from './multiple_frame.png';
 import NewGoldChip from './new_gold_chip.png';
+import MMM from './mmm.png';
+import Text from './text.png';
 
 export {
     Arrow,
@@ -64,4 +66,6 @@ export {
     CleanRaid,
     GrayChip,
     MultipleFrame,
+    MMM,
+    Text,
 };
