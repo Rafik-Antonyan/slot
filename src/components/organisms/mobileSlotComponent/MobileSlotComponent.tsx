@@ -5,6 +5,8 @@ import { ISlotData } from 'utils/types/slot';
 import { Modal } from 'components/molecules/modal/Modal';
 import { BonusModal } from 'components/molecules/bonusModal/BonusModal';
 import { MobileSlotButtons } from 'components/molecules/mobileSlotButtons/MobileSlotButtons';
+import { SlotView } from 'components/molecules/slotView/SlotView';
+import { BonusRound } from '../bonusRound/BonusRound';
 import styles from './mobileSlotComponent.module.scss';
 
 const PERSONAGE_TEXTS: string[] = [
@@ -57,38 +59,51 @@ export const MobileSlotComponent: React.FC = () => {
 
     return (
         <div className={styles.mobileSlotComponent}>
-            <img src={ClipGaming} alt='logo' />
-            {/* <SlotView
-                action={action}
-                selectedBonus={selectedBonus}
-                isDoneInitialSpin={isDoneInitialSpin}
-                setSelectedBonus={setSelectedBonus}
-                /> */}
-            <MobileSlotButtons
-                setAction={setAction}
-                slotData={slotData}
-                setSlotData={setSlotData}
-            />
-            <Modal
-                children={
-                    <BonusModal
-                        setIsOpenBonuses={setIsOpenBonuses}
+            {selectedBonus && isDoneInitialSpin ? (
+                <BonusRound
+                    selectedBonus={selectedBonus}
+                    setSelectedBonus={setSelectedBonus}
+                    setIsDoneInitialSpin={setIsDoneInitialSpin}
+                />
+            ) : (
+                <>
+                    <img src={ClipGaming} alt='logo' />
+                    <SlotView
+                        action={action}
+                        selectedBonus={selectedBonus}
+                        isDoneInitialSpin={isDoneInitialSpin}
                         setSelectedBonus={setSelectedBonus}
                     />
-                }
-                isOpen={isOpenBonuses}
-                onClose={() => setIsOpenBonuses(false)}
-            />
-            <img
-                src={MobileCharacter}
-                alt='character'
-                className={styles.mobileSlotComponent_character}
-            />
-            <div className={styles.slot_text} style={showText ? { opacity: 1 } : { opacity: 0 }}>
-                <div>
-                    <p>{text}</p>
-                </div>
-            </div>
+                    <MobileSlotButtons
+                        setAction={setAction}
+                        slotData={slotData}
+                        setSlotData={setSlotData}
+                    />
+                    <Modal
+                        children={
+                            <BonusModal
+                                setIsOpenBonuses={setIsOpenBonuses}
+                                setSelectedBonus={setSelectedBonus}
+                            />
+                        }
+                        isOpen={isOpenBonuses}
+                        onClose={() => setIsOpenBonuses(false)}
+                    />
+                    <img
+                        src={MobileCharacter}
+                        alt='character'
+                        className={styles.mobileSlotComponent_character}
+                    />
+                    <div
+                        className={styles.slot_text}
+                        style={showText ? { opacity: 1 } : { opacity: 0 }}
+                    >
+                        <div>
+                            <p>{text}</p>
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 };

@@ -110,6 +110,8 @@ export const SlotView: React.FC<ISlotView> = ({
             setBoxSize(175);
         } else if (window.innerWidth > 1024) {
             setBoxSize(150);
+        } else {
+            setBoxSize(75);
         }
     }, [window.innerWidth]);
 
@@ -523,13 +525,7 @@ export const SlotView: React.FC<ISlotView> = ({
                         <div className={styles.slotView_container_slot_right}>
                             {Array.from({ length: 3 }, (_, index) =>
                                 index < lives ? (
-                                    <img
-                                        key={index}
-                                        src={
-                                            freeSpins === 0 ? ExtraGold : Gold || '/placeholder.svg'
-                                        }
-                                        alt='gold'
-                                    />
+                                    <img key={index} src={(freeSpins === 0 && selectedBonus === EBonuses.RAID) ? ExtraGold : Gold || '/placeholder.svg'} alt='gold' />
                                 ) : (
                                     <div key={index} />
                                 ),

@@ -8,6 +8,10 @@
     position: relative;
     z-index: 10;
 
+    @include respond-to(md){
+        justify-content: center;
+    }
+
     &_container {
         width: 1074px;
         height: 100%;
@@ -21,6 +25,11 @@
             width: 874px;
         }
 
+        @include respond-to(md){
+            width: 380px;
+            padding-top: 0;
+        }
+
         &_slot {
             display: flex;
             flex-direction: column;
@@ -31,11 +40,20 @@
             padding-right: 40px;
             position: relative;
 
+            @include respond-to(md){
+                justify-content: flex-start;
+                padding-right: 0;
+            }
+
             & > img {
                 width: 250px;
                 position: absolute;
                 top: -75px;
                 z-index: 10;
+
+                @include respond-to(md){
+                    display: none;
+                }
             }
 
             &_game {
@@ -53,12 +71,21 @@
                     height: 634px;
                 }
 
+                @include respond-to(md){
+                    height: 308px;
+                    padding: 4px;
+                }
+
                 & > .game {
                     background-color: #1e1e1e;
                     width: 100%;
                     height: 100%;
                     position: relative;
                     overflow: hidden;
+
+                    @include respond-to(md){
+                        padding: 2px 4px;
+                    }
 
                     .reelsContainer {
                         display: flex;
@@ -100,6 +127,10 @@
                         @include respond-to(xl){
                             width: 150px;
                         }
+
+                        @include respond-to(md){
+                            width: 75px;
+                        }
                     }
 
                     .reel {
@@ -128,6 +159,12 @@
                         @include respond-to(xl){
                             width: 130px;
                             height: 130px;
+                        }
+
+                        @include respond-to(md){
+                            width: 70px;
+                            height: 70px;
+                            margin: 2px 0;
                         }
                     }
                 }

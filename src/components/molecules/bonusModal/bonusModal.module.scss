@@ -6,6 +6,7 @@
     background-color: rgba(19, 14, 20, 0.75);
     display: flex;
     justify-content: center;
+    overflow-y: auto;
 
     &_container {
         width: calc(100% - 748px);
@@ -25,6 +26,11 @@
             width: calc(100% - 248px);
             gap: 64px;
             margin-top: 75px;
+        }
+
+        @include respond-to(md) {
+            gap: 15px;
+            width: 80%;
         }
 
         &_bet {
@@ -55,6 +61,13 @@
 
                 @include respond-to(xl) {
                     height: 140px;
+                }
+
+                @include respond-to(md) {
+                    padding: 0 20px;
+                    &:nth-child(1),&:nth-child(3) {
+                        display: none;
+                    }
                 }
 
                 &:nth-child(2) {
@@ -140,6 +153,10 @@
 
             @include respond-to(xl) {
                 height: 400px;
+            }
+
+            @include respond-to(md) {
+                flex-direction: column;     
             }
 
             & > div {
@@ -240,6 +257,11 @@
             align-items: center;
             justify-content: center;
 
+            @include respond-to(md) {
+                width: 80%;
+                height: 400px;
+            }
+
             & > div {
                 flex: 1;
                 display: flex;
@@ -270,6 +292,17 @@
                         line-height: 28px;
                         font-weight: bold;
                     }
+
+                    @include respond-to(md) {
+                        p{
+                            font-size: 24px;
+                            text-align: center;
+                        }
+
+                        span{
+                            font-size: 28px;
+                        }
+                    }
                 }
             }
             &_buttons {
@@ -278,6 +311,11 @@
                 height: 68px;
                 max-height: 68px;
                 flex-wrap: nowrap;
+                
+                @include respond-to(md) {
+                    height: 50px;
+                    max-height: 50px;
+                }
 
                 button {
                     flex: 1;
@@ -289,6 +327,11 @@
                     font-size: 30px;
                     line-height: 28px;
                     height: 68px;
+
+                    @include respond-to(md) {
+                        height: 50px;
+                        font-size: 24px;
+                    }
 
                     &:first-child {
                         background-color: #312633;
