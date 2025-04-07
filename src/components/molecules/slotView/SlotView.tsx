@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useEffect, useState, useRef } from 'react';
-import { ClipGaming, ExpanedWild, ExtraGold, Gold, Raid, Wild } from 'assets/png';
+import { ClipGaming, ExpanedWild, ExtraGold, Gold, Miltiple, Wild } from 'assets/png';
 import { generateInitialBonusview, viewGenerator } from 'utils/generators/viewGenerator';
 import { EBonuses, ESlotActions } from 'utils/types/slotActions';
 import HANDS_VIDEO from '../../../assets/mp4/hands.mp4';
@@ -332,12 +332,28 @@ export const SlotView: React.FC<ISlotView> = ({
                             newWildPositions.push({
                                 column,
                                 row,
-                                x: rect.left - gameRect.left + offsetX + (isMobile ? 10 : 0),
-                                y: rect.top - gameRect.top + offsetY + (isMobile ? 15 : 0),
+                                x:
+                                    rect.left -
+                                    gameRect.left +
+                                    offsetX +
+                                    (isMobile
+                                        ? selectedBonus === EBonuses.RAID
+                                            ? -(boxSize / 1.5)
+                                            : 10
+                                        : 0),
+                                y:
+                                    rect.top -
+                                    gameRect.top +
+                                    offsetY +
+                                    (isMobile
+                                        ? selectedBonus === EBonuses.RAID
+                                            ? -(boxSize / 1.5)
+                                            : 15
+                                        : 0),
                             });
                         }
                     }
-                } else if (finalResult[column]?.[row] === Raid) {
+                } else if (finalResult[column]?.[row] === Miltiple) {
                     const key = `${column}-${row}`;
 
                     // Only add if this wild is not already tracked
@@ -356,8 +372,16 @@ export const SlotView: React.FC<ISlotView> = ({
                             newRaidPositions.push({
                                 column,
                                 row,
-                                x: rect.left - gameRect.left + offsetX,
-                                y: rect.top - gameRect.top + offsetY,
+                                x:
+                                    rect.left -
+                                    gameRect.left +
+                                    offsetX -
+                                    (isMobile ? boxSize / 1.5 : 0),
+                                y:
+                                    rect.top -
+                                    gameRect.top +
+                                    offsetY -
+                                    (isMobile ? boxSize / 1.5 : 0),
                             });
                         }
                     }
@@ -439,7 +463,7 @@ export const SlotView: React.FC<ISlotView> = ({
                 setWildCount((prev) => prev + wildsInResult);
             }, 500);
         }
-        const raidsInResult = finalResult.flat().filter((symbol) => symbol === Raid).length;
+        const raidsInResult = finalResult.flat().filter((symbol) => symbol === Miltiple).length;
 
         if (raidsInResult > 0) {
             setTimeout(() => {
