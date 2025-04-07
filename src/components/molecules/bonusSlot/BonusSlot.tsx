@@ -3,6 +3,8 @@ import { SlotView } from '../slotView/SlotView';
 import { BonusRoundButtons } from '../bonusRoundButtons/BonusRoundButtons';
 import { EBonuses } from 'utils/types/slotActions';
 import { TotalWin } from 'components/atoms/totalWin/TotalWin';
+import { MobileBonusButtons } from '../mobileBonusButtons/MobileBonusButtons';
+import { ClipGaming } from 'assets/png';
 import styles from './bonusSlot.module.scss';
 
 interface IBonusSlot {
@@ -11,11 +13,20 @@ interface IBonusSlot {
     setIsDoneInitialSpin?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonus, setIsDoneInitialSpin }) => {
-    const [freeSpins, setFreeSpins] = useState<number>(selectedBonus === EBonuses.RAID ? 3 : 10);
+export const BonusSlot: React.FC<IBonusSlot> = ({
+    selectedBonus,
+    setSelectedBonus,
+    setIsDoneInitialSpin,
+}) => {
+    const [freeSpins, setFreeSpins] = useState<number>(selectedBonus === EBonuses.RAID ? 3 : 100);
     const [totalWin, setTotalWin] = useState<number>(0);
     const [isResult, setIsResult] = useState<boolean>(false);
     const [extraSpins, setExtraSpins] = useState<number>(3);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+
+    useEffect(() => {
+        setIsMobile(window.innerWidth < 768);
+    }, [window.innerWidth]);
 
     useEffect(() => {
         if (!freeSpins) {
@@ -23,7 +34,7 @@ export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonu
                 setTimeout(() => {
                     setIsResult(true);
                 }, 3300);
-            } else if(selectedBonus === EBonuses.INTERROGATION){
+            } else if (selectedBonus === EBonuses.INTERROGATION) {
                 setTimeout(() => {
                     setIsResult(true);
                 }, 5000);
@@ -35,18 +46,19 @@ export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonu
             }, 3300);
         }
     }, [freeSpins, extraSpins]);
-    
+
     useEffect(() => {
-        if(isResult && selectedBonus === EBonuses.RAID){
+        if (isResult && selectedBonus === EBonuses.RAID) {
             setTimeout(() => {
                 setIsDoneInitialSpin && setIsDoneInitialSpin(false);
             }, 3000);
         }
-    },[isResult])
+    }, [isResult]);
 
     return (
         <div className={styles.bonusSlot}>
             <div>
+                <img src={ClipGaming} alt='logo' />
                 <SlotView
                     selectedBonus={selectedBonus}
                     freeSpins={freeSpins}
@@ -55,18 +67,20 @@ export const BonusSlot: React.FC<IBonusSlot> = ({ selectedBonus, setSelectedBonu
                     extraSpins={extraSpins}
                     setExtraSpins={setExtraSpins}
                 />
-                {selectedBonus === EBonuses.RAID ? (
-                    <BonusRoundButtons
+                {isMobile ? (
+                    <MobileBonusButtons
                         freeSpins={freeSpins}
-                        extraSpins={extraSpins}
+                        extraSpins={selectedBonus === EBonuses.RAID ? extraSpins : undefined}
                         totalWin={totalWin}
                     />
                 ) : (
                     <BonusRoundButtons
                         freeSpins={freeSpins}
+                        extraSpins={selectedBonus === EBonuses.RAID ? extraSpins : undefined}
                         totalWin={totalWin}
                     />
                 )}
+
                 {isResult && <TotalWin totalWin={totalWin} setSelectedBonus={setSelectedBonus} />}
             </div>
         </div>

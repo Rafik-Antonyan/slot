@@ -1,3 +1,5 @@
+@import '../../../styles/breakPoints.scss';
+
 .bonusSlot{
     width: 100%;
     height: 100%;
@@ -14,5 +16,17 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
+        width: 100%;
+        align-items: center;
+
+        &>img{
+            display: none;
+            
+            @include respond-to(md) {
+                display: block !important;
+                width: 223px;
+                object-fit: cover;
+            }
+        }
     }
 }

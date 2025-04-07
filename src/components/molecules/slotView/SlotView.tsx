@@ -66,6 +66,7 @@ export const SlotView: React.FC<ISlotView> = ({
     const [muiltiplerCount, setMuiltiplerCount] = useState<number>(0);
     const [lives, setLives] = useState<number>(3);
     const [isExtraRound, setIsExtraRound] = useState<boolean>(false);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
     const reelsRef = useRef<HTMLDivElement[]>([]);
     const spinTimeoutsRef = useRef<any[]>([]);
     const gameContainerRef = useRef<HTMLDivElement>(null);
@@ -93,6 +94,10 @@ export const SlotView: React.FC<ISlotView> = ({
         setReels(initialReels);
     }, []);
 
+    useEffect(() => {
+        setIsMobile(window.innerWidth < 768);
+    }, [window.innerWidth]);
+
     // Clean up timeouts on unmount
     useEffect(() => {
         return () => {
@@ -111,7 +116,7 @@ export const SlotView: React.FC<ISlotView> = ({
         } else if (window.innerWidth > 1024) {
             setBoxSize(150);
         } else {
-            setBoxSize(75);
+            setBoxSize(92);
         }
     }, [window.innerWidth]);
 
@@ -322,8 +327,8 @@ export const SlotView: React.FC<ISlotView> = ({
                             newWildPositions.push({
                                 column,
                                 row,
-                                x: rect.left - gameRect.left + offsetX,
-                                y: rect.top - gameRect.top + offsetY,
+                                x: rect.left - gameRect.left + offsetX + (isMobile ? 10 : 0),
+                                y: rect.top - gameRect.top + offsetY + (isMobile ? 15 : 0),
                             });
                         }
                     }

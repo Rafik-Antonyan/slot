@@ -1,0 +1,41 @@
+.mobileBonusButtons{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+
+    &>div{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &>img{
+            width: 54px;
+            height: 54px;
+            margin-left: -5px;
+        }
+    }
+
+    .infoBlock{
+        display: flex;
+        gap: 4px;
+        flex-direction: column;
+        color: white;
+        justify-content: center;
+
+        p{
+            font-size: 16px;
+            line-height: 28px;
+            font-weight: 600;
+        }
+
+        span{
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 28px;
+        }
+    }
+}

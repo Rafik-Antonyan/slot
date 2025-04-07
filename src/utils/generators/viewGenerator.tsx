@@ -12,12 +12,13 @@ import {
     Wild,
     Women,
     GrayChip,
+    ExpanedWild,
 } from 'assets/png';
 import { EBonuses } from 'utils/types/slotActions';
 
 const BONUS_SYMBOLS = {
     [EBonuses.GOLDEN]: GoldenChip,
-    [EBonuses.INTERROGATION]: BonusChair,
+    [EBonuses.INTERROGATION]: ExpanedWild,
     [EBonuses.RAID]: Raid,
 };
 
