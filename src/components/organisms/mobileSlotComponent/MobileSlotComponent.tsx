@@ -19,7 +19,7 @@ const PERSONAGE_TEXTS: string[] = [
 export const MobileSlotComponent: React.FC = () => {
     const [action, setAction] = useState<ESlotActions>(ESlotActions.PAUSE);
     const [isOpenBonuses, setIsOpenBonuses] = useState<boolean>(false);
-    const [selectedBonus, setSelectedBonus] = useState<EBonuses | null>(EBonuses.GOLDEN);
+    const [selectedBonus, setSelectedBonus] = useState<EBonuses | null>(null);
     const [isDoneInitialSpin, setIsDoneInitialSpin] = useState<boolean>(false);
     const [showText, setShowText] = useState<boolean>(false);
     const [text, setText] = useState<string>('');
