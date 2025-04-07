@@ -8,7 +8,7 @@ import { MobileSlotComponent } from 'components/organisms/mobileSlotComponent/Mo
 import styles from './slot.module.scss';
 
 const Slot: React.FC = () => {
-    const [step, setStep] = useState<number>(0);
+    const [step, setStep] = useState<number>(2);
     const [isMobile, setIsMobile] = useState<boolean>(false);
 
     useEffect(() => {

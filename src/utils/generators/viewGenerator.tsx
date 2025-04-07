@@ -53,7 +53,6 @@ const BONUS_ITEM_LIST: string[] = [
     BlueChip,
     GreenChip,
     PurpleChip,
-    Wild,
     RedChip,
     Man,
     Man2,
@@ -120,7 +119,7 @@ export const viewGenerator = (
     selectedRound?: EBonuses | null,
     withGrayCips?: boolean,
 ): string[][] => {
-    if (selectedRound) {
+    if (selectedRound && !BONUS_ITEM_LIST.includes(BONUS_SYMBOLS[selectedRound])) {
         BONUS_ITEM_LIST.push(BONUS_SYMBOLS[selectedRound]);
     }
 

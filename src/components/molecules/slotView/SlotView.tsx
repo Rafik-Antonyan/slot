@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useEffect, useState, useRef } from 'react';
-import { ClipGaming, ExtraGold, Gold, Raid, Wild } from 'assets/png';
+import { ClipGaming, ExpanedWild, ExtraGold, Gold, Raid, Wild } from 'assets/png';
 import { generateInitialBonusview, viewGenerator } from 'utils/generators/viewGenerator';
 import { EBonuses, ESlotActions } from 'utils/types/slotActions';
 import HANDS_VIDEO from '../../../assets/mp4/hands.mp4';
@@ -127,7 +127,7 @@ export const SlotView: React.FC<ISlotView> = ({
             !isSpinning &&
             !(
                 selectedBonus === EBonuses.INTERROGATION &&
-                finalResult.flat(Number.POSITIVE_INFINITY).includes(Wild)
+                finalResult.flat(Number.POSITIVE_INFINITY).includes(ExpanedWild)
             ) &&
             !(selectedBonus === EBonuses.RAID && freeSpins === 1)
         ) {
@@ -158,7 +158,12 @@ export const SlotView: React.FC<ISlotView> = ({
         spinTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
         spinTimeoutsRef.current = [];
 
-        const generatedData = viewGenerator(4, 5, selectedBonus, !isExtraRound && selectedBonus === EBonuses.RAID);
+        const generatedData = viewGenerator(
+            4,
+            5,
+            selectedBonus,
+            !isExtraRound && selectedBonus === EBonuses.RAID,
+        );
 
         setIsSpinning(true);
         setSpinningColumns([true, true, true, true, true]);
@@ -379,7 +384,7 @@ export const SlotView: React.FC<ISlotView> = ({
         for (let column = 0; column < finalResult.length; column++) {
             for (let row = 0; row < 4; row++) {
                 // Check for wild symbols
-                if (finalResult[column]?.[row] === Wild) {
+                if (finalResult[column]?.[row] === ExpanedWild) {
                     // Find the element position
                     const slotItemElement = document.querySelector(
                         `.${styles.reelColumn}:nth-child(${column + 1}) .${styles.slotItem}:nth-child(${row + 1})`,
@@ -411,7 +416,7 @@ export const SlotView: React.FC<ISlotView> = ({
                 }
             }
         }
-        if (finalResult.flat(Number.POSITIVE_INFINITY).includes(Wild) && freeSpins! > 0) {
+        if (finalResult.flat(Number.POSITIVE_INFINITY).includes(ExpanedWild) && freeSpins! > 0) {
             setTimeout(() => {
                 setExpandingElements([]);
                 handleSpin();
@@ -458,15 +463,14 @@ export const SlotView: React.FC<ISlotView> = ({
 
     // Add this function to handle the progressive animation
     const animateExpansion = (column: number, startRow: number, startY: number) => {
-        const slotItemHeight = 195;
-        const totalHeight = slotItemHeight * 4; // Total height of the slot view
+        const slotItemHeight = isMobile ? 93 : 195;
+        const totalHeight = slotItemHeight * 4 - 60; // Total height of the slot view
 
         // Calculate how much to expand upward and downward
-        const expandUpward = startRow * slotItemHeight;
+        const expandUpward = startRow * (slotItemHeight - (isMobile ? 20 : 0));
 
         // Calculate the final position and height
-        const finalY = startY - expandUpward - startRow * 5;
-        const finalHeight = totalHeight;
+        const finalY = startY - expandUpward - startRow * 5 + (isMobile ? 13 : 0);
 
         // Update the element to its final expanded state
         setExpandingElements((prev) =>
@@ -475,7 +479,7 @@ export const SlotView: React.FC<ISlotView> = ({
                     ? {
                           ...item,
                           startY: finalY, // Move up to accommodate upward expansion
-                          height: finalHeight, // Expand to full height
+                          height: totalHeight, // Expand to full height
                           isAnimating: false,
                       }
                     : item,
@@ -530,7 +534,15 @@ export const SlotView: React.FC<ISlotView> = ({
                         <div className={styles.slotView_container_slot_right}>
                             {Array.from({ length: 3 }, (_, index) =>
                                 index < lives ? (
-                                    <img key={index} src={(freeSpins === 0 && selectedBonus === EBonuses.RAID) ? ExtraGold : Gold || '/placeholder.svg'} alt='gold' />
+                                    <img
+                                        key={index}
+                                        src={
+                                            freeSpins === 0 && selectedBonus === EBonuses.RAID
+                                                ? ExtraGold
+                                                : Gold || '/placeholder.svg'
+                                        }
+                                        alt='gold'
+                                    />
                                 ) : (
                                     <div key={index} />
                                 ),
@@ -602,7 +614,6 @@ export const SlotView: React.FC<ISlotView> = ({
                                 ))}
 
                             {expandingElements.map((item, index) => {
-                                // Set up the video ref
                                 if (videoRefs.current.length <= index) {
                                     videoRefs.current.push(null);
                                 }
@@ -614,13 +625,13 @@ export const SlotView: React.FC<ISlotView> = ({
                                         style={{
                                             position: 'absolute',
                                             overflow: 'hidden',
-                                            left: `${(item.column * (boxSize + (boxSize !== 200 ? 5 : 0))) + 10}px`, // Adjust based on your slot width
+                                            left: `${item.column * (boxSize + (boxSize !== 200 ? (isMobile ? -18 : 5) : 0)) + (isMobile ? 0 : 10)}px`,
                                             top: `${item.startY - 20}px`,
-                                            width: `${boxSize - 15}px`,
+                                            width: `${boxSize - (isMobile ? 20 : 15)}px`,
                                             height: `${item.height}px`,
                                             backgroundColor: '#1e1e1e',
-                                            zIndex: 90, // Below the wild symbols
-                                            transition: 'all 0.5s ease-out', // Smooth transition for the expansion
+                                            zIndex: 90,
+                                            transition: 'all 0.5s ease-out',
                                         }}
                                     >
                                         <video
