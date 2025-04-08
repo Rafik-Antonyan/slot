@@ -42,9 +42,17 @@ import MobileRaid from './clean_raid_mobile.png';
 import BonusFeatures from './bonus_features.png';
 import MMMMobile from './mmm_mobile.png';
 import ExpanedWild from './expaned_wild.png';
-import MobileBGBlur from './mobile_bg_blur.png'
+import MobileBGBlur from './mobile_bg_blur.png';
+import CleanI from './clean_I.png';
+import MusicIcon from './music.png';
+import SoundIcon from './sound.png';
+import InfoIcon from './info.png';
 
 export {
+    MusicIcon,
+    SoundIcon,
+    InfoIcon,
+    CleanI,
     MobileBGBlur,
     ExpanedWild,
     BonusFeatures,

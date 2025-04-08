@@ -6,8 +6,8 @@
     justify-content: flex-end;
     position: relative;
     z-index: 10;
-    
-    @include respond-to(md){
+
+    @include respond-to(md) {
         width: 100%;
         justify-content: center;
     }
@@ -17,15 +17,15 @@
         height: 100%;
         padding-top: 40px;
 
-        @include respond-to(2xl){
+        @include respond-to(2xl) {
             width: 974px;
         }
 
-        @include respond-to(xl){
+        @include respond-to(xl) {
             width: 874px;
         }
 
-        @include respond-to(md){
+        @include respond-to(md) {
             width: 380px;
             padding-top: 0;
         }
@@ -40,7 +40,7 @@
             padding-right: 40px;
             position: relative;
 
-            @include respond-to(md){
+            @include respond-to(md) {
                 justify-content: flex-start;
                 padding-right: 0;
             }
@@ -51,7 +51,7 @@
                 top: -75px;
                 z-index: 10;
 
-                @include respond-to(md){
+                @include respond-to(md) {
                     display: none;
                 }
             }
@@ -63,15 +63,15 @@
                 height: 834px;
                 padding: 17px;
 
-                @include respond-to(2xl){
+                @include respond-to(2xl) {
                     height: 734px;
                 }
 
-                @include respond-to(xl){
+                @include respond-to(xl) {
                     height: 634px;
                 }
 
-                @include respond-to(md){
+                @include respond-to(md) {
                     height: 308px;
                     padding: 4px;
                 }
@@ -83,7 +83,7 @@
                     position: relative;
                     overflow: hidden;
 
-                    @include respond-to(md){
+                    @include respond-to(md) {
                         padding: 2px 4px;
                     }
 
@@ -120,15 +120,15 @@
                             }
                         }
 
-                        @include respond-to(2xl){
+                        @include respond-to(2xl) {
                             width: 175px;
                         }
 
-                        @include respond-to(xl){
+                        @include respond-to(xl) {
                             width: 150px;
                         }
 
-                        @include respond-to(md){
+                        @include respond-to(md) {
                             width: 75px;
                         }
                     }
@@ -151,17 +151,17 @@
                             object-fit: cover;
                         }
 
-                        @include respond-to(2xl){
+                        @include respond-to(2xl) {
                             width: 155px;
                             height: 155px;
                         }
 
-                        @include respond-to(xl){
+                        @include respond-to(xl) {
                             width: 130px;
                             height: 130px;
                         }
 
-                        @include respond-to(md){
+                        @include respond-to(md) {
                             width: 70px;
                             height: 70px;
                             margin: 2px 0;
@@ -182,7 +182,7 @@
                 color: white;
                 padding: 0 20px;
 
-                @include respond-to(md){
+                @include respond-to(md) {
                     padding: 0;
                     top: -105px;
                 }
@@ -198,10 +198,6 @@
                     background-size: 100% 100%;
                     background-color: black;
 
-                    @include respond-to(md){
-                        width: 100px;
-                    }
-
                     p {
                         font-size: 18px;
                         line-height: 28px;
@@ -213,6 +209,17 @@
                         line-height: 28px;
                         font-weight: 900;
                     }
+                    @include respond-to(md) {
+                        width: 100px;
+
+                        p {
+                            font-size: 14px;
+                        }
+
+                        span {
+                            font-size: 24px;
+                        }
+                    }
                 }
             }
 
@@ -223,13 +230,14 @@
                 flex-direction: column-reverse;
                 gap: 10px;
 
-                @include respond-to(md){
+                @include respond-to(md) {
                     bottom: -110px;
                     left: 9vw;
                     flex-direction: row;
                     gap: calc(30vw - 40px);
 
-                    div, img {
+                    div,
+                    img {
                         transform: rotate(90deg);
                         height: 30vw !important;
                     }
@@ -323,7 +331,7 @@
     .raid {
         animation: raidpulse-small 1s infinite alternate;
     }
-    
+
     @keyframes raidpulse-small {
         100% {
             top: -100px;

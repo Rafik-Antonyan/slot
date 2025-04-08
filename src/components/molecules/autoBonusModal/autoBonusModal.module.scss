@@ -1,0 +1,349 @@
+@import '../../../styles/breakPoints.scss';
+
+.autoBonusModal {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(19, 14, 20, 0.75);
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+
+    &_container {
+        width: calc(100% - 748px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 104px;
+        margin-top: 108px;
+
+        @include respond-to(2xl) {
+            width: calc(100% - 600px);
+            gap: 84px;
+            margin-top: 90px;
+        }
+
+        @include respond-to(xl) {
+            width: calc(100% - 248px);
+            gap: 64px;
+            margin-top: 75px;
+        }
+
+        @include respond-to(md) {
+            gap: 15px;
+            width: 80%;
+        }
+
+        &_bet {
+            width: 100%;
+            display: flex;
+            gap: 56px;
+            justify-content: center;
+
+            @include respond-to(2xl) {
+                gap: 45px;
+            }
+
+            @include respond-to(xl) {
+                gap: 35px;
+            }
+
+            & > div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 15px;
+                height: 183px;
+                background-color: #130e14;
+                width: 33%;
+
+                @include respond-to(2xl) {
+                    height: 160px;
+                }
+
+                @include respond-to(xl) {
+                    height: 140px;
+                }
+
+                @include respond-to(md) {
+                    padding: 0 20px;
+                    &:nth-child(1),&:nth-child(3) {
+                        display: none;
+                    }
+                }
+
+                p {
+                    font-size: 30px;
+                    line-height: 28px;
+                    color: white;
+
+                    @include respond-to(2xl) {
+                        font-size: 26px;
+                        line-height: 24px;
+                    }
+
+                    @include respond-to(xl) {
+                        font-size: 22px;
+                        line-height: 20px;
+                    }
+                }
+
+                & > div {
+                    display: flex;
+                    gap: 30px;
+                    align-items: center;
+                    color: white;
+
+                    & > button {
+                        width: 44px;
+                        height: 44px;
+                        max-width: 44px;
+                        max-height: 44px;
+                        padding: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: #2c9c38;
+
+                        @include respond-to(2xl) {
+                            width: 42px;
+                            height: 42px;
+                            max-width: 42px;
+                            max-height: 42px;
+                        }
+
+                        @include respond-to(xl) {
+                            width: 40px;
+                            height: 40px;
+                            max-width: 40px;
+                            max-height: 40px;
+                        }
+                    }
+
+                    & > span {
+                        font-size: 34px;
+                        line-height: 28px;
+                        font-weight: bold;
+
+                        @include respond-to(2xl) {
+                            font-size: 30px;
+                            line-height: 24px;
+                        }
+
+                        @include respond-to(xl) {
+                            font-size: 24px;
+                            line-height: 18px;
+                        }
+                    }
+                }
+            }
+        }
+
+        &_bonuses {
+            width: 100%;
+            display: flex;
+            gap: 56px;
+            height: 504px;
+            color: white;
+
+            @include respond-to(2xl) {
+                height: 450px;
+            }
+
+            @include respond-to(xl) {
+                height: 400px;
+            }
+
+            @include respond-to(md) {
+                flex-direction: column;     
+            }
+
+            & > div {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                background-color: #130e14;
+                height: 100%;
+
+                p {
+                    font-size: 30px;
+                    line-height: 28px;
+
+                    @include respond-to(2xl) {
+                        font-size: 26px;
+                        line-height: 24px;
+                    }
+
+                    @include respond-to(xl) {
+                        font-size: 22px;
+                        line-height: 20px;
+                    }
+                }
+
+                span {
+                    font-size: 34px;
+                    line-height: 28px;
+                    font-weight: bold;
+                    margin-top: 20px;
+
+                    @include respond-to(2xl) {
+                        font-size: 30px;
+                        line-height: 24px;
+                        margin-top: 15px;
+                    }
+
+                    @include respond-to(xl) {
+                        font-size: 26px;
+                        line-height: 20px;
+                        margin-top: 10px;
+                    }
+                }
+
+                button {
+                    background-color: #2c9c38;
+                    border: none;
+                    margin-top: 60px;
+                    height: 68px;
+                    font-weight: bold;
+                    font-size: 30px;
+                    line-height: 28px;
+
+                    @include respond-to(2xl) {
+                        margin-top: 50px;
+                        height: 60px;
+                        font-size: 26px;
+                        line-height: 24px;
+                    }
+
+                    @include respond-to(xl) {
+                        margin-top: 40px;
+                        height: 50px;
+                        font-size: 22px;
+                        line-height: 20px;
+                    }
+                }
+
+                img {
+                    width: 100%;
+                    height: 290px;
+
+                    @include respond-to(2xl) {
+                        height: 270px;
+                    }
+
+                    @include respond-to(xl) {
+                        height: 250px;
+                    }
+                }
+            }
+        }
+    }
+
+    &_confirm {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &_container {
+            width: 532px;
+            display: flex;
+            gap: 56px;
+            height: 560px;
+            color: white;
+            align-items: center;
+            justify-content: center;
+
+            @include respond-to(md) {
+                width: 80%;
+                height: 400px;
+            }
+
+            & > div {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                background-color: #130e14;
+                height: 100%;
+
+                img {
+                    width: 70%;
+                    object-fit: cover;
+                }
+                & > .autoBonusModal_confirm_text {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 44px;
+                    height: 100%;
+                    margin-top: -65px;
+
+                    p {
+                        font-size: 30px;
+                        line-height: 28px;
+                    }
+
+                    span {
+                        font-size: 34px;
+                        line-height: 28px;
+                        font-weight: bold;
+                    }
+
+                    @include respond-to(md) {
+                        p{
+                            font-size: 24px;
+                            text-align: center;
+                        }
+
+                        span{
+                            font-size: 28px;
+                        }
+                    }
+                }
+            }
+            &_buttons {
+                width: 100%;
+                display: flex;
+                height: 68px;
+                max-height: 68px;
+                flex-wrap: nowrap;
+                
+                @include respond-to(md) {
+                    height: 50px;
+                    max-height: 50px;
+                }
+
+                button {
+                    flex: 1;
+                    background-color: #2c9c38;
+                    width: 50%;
+                    border: none;
+                    height: 100%;
+                    font-weight: bold;
+                    font-size: 30px;
+                    line-height: 28px;
+                    height: 68px;
+
+                    @include respond-to(md) {
+                        height: 50px;
+                        font-size: 24px;
+                    }
+
+                    &:first-child {
+                        background-color: #312633;
+                    }
+                }
+            }
+        }
+    }
+
+    .info_text {
+        font-size: 30px;
+        line-height: 28px;
+    }
+}

@@ -73,6 +73,19 @@ const RAID_ITEM_LIST: string[] = [
     GrayChip,
     GrayChip,
     GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
+    GrayChip,
 ];
 
 export const viewGenerator = (
@@ -82,6 +95,9 @@ export const viewGenerator = (
     withGrayCips?: boolean,
 ): string[][] => {
     if (selectedRound && !BONUS_ITEM_LIST.includes(BONUS_SYMBOLS[selectedRound])) {
+        if(selectedRound === EBonuses.INTERROGATION){
+            BONUS_ITEM_LIST.pop()
+        }
         BONUS_ITEM_LIST.push(BONUS_SYMBOLS[selectedRound]);
     }
 

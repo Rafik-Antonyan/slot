@@ -8,13 +8,20 @@ import { Modal } from 'components/molecules/modal/Modal';
 import { BonusRound } from 'components/organisms/bonusRound/BonusRound';
 import myVideo from '../../../assets/mp4/main_interface.mp4';
 import { MMM } from 'assets/png';
+import { AutoBonusModal } from 'components/molecules/autoBonusModal/AutoBonusModal';
 import styles from './slot.module.scss';
 
-const PERSONAGE_TEXTS:string[] = ["Nope, the win’s going to someone else", "You Suck", "Ever think that maybe this slow doesnt like you", "If Bad Luck was a profession, you’d be an expert"]
+const PERSONAGE_TEXTS: string[] = [
+    'Nope, the win’s going to someone else',
+    'You Suck',
+    'Ever think that maybe this slow doesnt like you',
+    'If Bad Luck was a profession, you’d be an expert',
+];
 
 export const Slot: React.FC = () => {
     const [action, setAction] = useState<ESlotActions>(ESlotActions.PAUSE);
     const [isOpenBonuses, setIsOpenBonuses] = useState<boolean>(false);
+    const [isOpenAutoBonuses, setIsOpenAutoBonuses] = useState<boolean>(false);
     const [selectedBonus, setSelectedBonus] = useState<EBonuses | null>(null);
     const [isDoneInitialSpin, setIsDoneInitialSpin] = useState<boolean>(false);
     const [showText, setShowText] = useState<boolean>(false);
@@ -23,6 +30,8 @@ export const Slot: React.FC = () => {
         betValue: 1,
         balance: 4000,
         autoSpins: 0,
+        autoBonusRounds: 1,
+        isAutoBonus: false,
     });
     const hasPausedOnce = useRef(false);
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -30,7 +39,7 @@ export const Slot: React.FC = () => {
     useEffect(() => {
         if (action === ESlotActions.PAUSE) {
             if (hasPausedOnce.current && videoRef.current) {
-                setText(PERSONAGE_TEXTS[Math.floor(Math.random() * 4)])
+                setText(PERSONAGE_TEXTS[Math.floor(Math.random() * 4)]);
                 setTimeout(() => {
                     videoRef.current!.play();
                     setShowText(true);
@@ -44,6 +53,8 @@ export const Slot: React.FC = () => {
             setIsOpenBonuses(true);
         } else if (action === ESlotActions.PLAY) {
             setAction(ESlotActions.PAUSE);
+        } else if (action === ESlotActions.AUTO_BONUS) {
+            setIsOpenAutoBonuses(true);
         }
     }, [action]);
 
@@ -60,11 +71,23 @@ export const Slot: React.FC = () => {
         }
     }, [selectedBonus]);
 
+    useEffect(() => {
+        if (
+            ((!isOpenAutoBonuses && action === ESlotActions.AUTO_BONUS) ||
+                (!isOpenBonuses && action === ESlotActions.BUY_BONUS)) &&
+            selectedBonus === null
+        ) {
+            setAction(ESlotActions.PAUSE);
+        }
+    }, [isOpenBonuses, isOpenAutoBonuses]);
+
     return (
         <div className={styles.slot}>
             {selectedBonus && isDoneInitialSpin ? (
                 <BonusRound
                     selectedBonus={selectedBonus}
+                    slotData={slotData}
+                    setSlotData={setSlotData}
                     setSelectedBonus={setSelectedBonus}
                     setIsDoneInitialSpin={setIsDoneInitialSpin}
                 />
@@ -97,6 +120,19 @@ export const Slot: React.FC = () => {
                         isOpen={isOpenBonuses}
                         onClose={() => setIsOpenBonuses(false)}
                     />
+                    <Modal
+                        children={
+                            <AutoBonusModal
+                                slotData={slotData}
+                                setIsOpenAutoBonuses={setIsOpenAutoBonuses}
+                                setSelectedBonus={setSelectedBonus}
+                                setSlotData={setSlotData}
+                            />
+                        }
+                        isOpen={isOpenAutoBonuses}
+                        onClose={() => setIsOpenAutoBonuses(false)}
+                    />
+
                     <div
                         className={styles.slot_text}
                         style={showText ? { opacity: 1 } : { opacity: 0 }}

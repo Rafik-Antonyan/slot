@@ -8,6 +8,7 @@ import { MobileSlotButtons } from 'components/molecules/mobileSlotButtons/Mobile
 import { SlotView } from 'components/molecules/slotView/SlotView';
 import { BonusRound } from '../bonusRound/BonusRound';
 import styles from './mobileSlotComponent.module.scss';
+import { AutoBonusModal } from 'components/molecules/autoBonusModal/AutoBonusModal';
 
 const PERSONAGE_TEXTS: string[] = [
     'Nope, the win’s going to someone else',
@@ -21,12 +22,15 @@ export const MobileSlotComponent: React.FC = () => {
     const [isOpenBonuses, setIsOpenBonuses] = useState<boolean>(false);
     const [selectedBonus, setSelectedBonus] = useState<EBonuses | null>(null);
     const [isDoneInitialSpin, setIsDoneInitialSpin] = useState<boolean>(false);
+    const [isOpenAutoBonuses, setIsOpenAutoBonuses] = useState<boolean>(false);
     const [showText, setShowText] = useState<boolean>(false);
     const [text, setText] = useState<string>('');
     const [slotData, setSlotData] = useState<ISlotData>({
         betValue: 1,
         balance: 4000,
         autoSpins: 0,
+        autoBonusRounds: 1,
+        isAutoBonus: false,
     });
 
     useEffect(() => {
@@ -42,6 +46,8 @@ export const MobileSlotComponent: React.FC = () => {
             setIsOpenBonuses(true);
         } else if (action === ESlotActions.PLAY) {
             setAction(ESlotActions.PAUSE);
+        } else if (action === ESlotActions.AUTO_BONUS) {
+            setIsOpenAutoBonuses(true);
         }
     }, [action]);
 
@@ -58,11 +64,23 @@ export const MobileSlotComponent: React.FC = () => {
         }
     }, [selectedBonus]);
 
+    useEffect(() => {
+        if (
+            ((!isOpenAutoBonuses && action === ESlotActions.AUTO_BONUS) ||
+                (!isOpenBonuses && action === ESlotActions.BUY_BONUS)) &&
+            selectedBonus === null
+        ) {
+            setAction(ESlotActions.PAUSE);
+        }
+    }, [isOpenBonuses, isOpenAutoBonuses]);
+
     return (
         <div className={styles.mobileSlotComponent}>
             {selectedBonus && isDoneInitialSpin ? (
                 <BonusRound
+                    slotData={slotData}
                     selectedBonus={selectedBonus}
+                    setSlotData={setSlotData}
                     setSelectedBonus={setSelectedBonus}
                     setIsDoneInitialSpin={setIsDoneInitialSpin}
                 />
@@ -72,7 +90,9 @@ export const MobileSlotComponent: React.FC = () => {
                     <SlotView
                         action={action}
                         selectedBonus={selectedBonus}
+                        slotData={slotData}
                         isDoneInitialSpin={isDoneInitialSpin}
+                        setSlotData={setSlotData}
                         setSelectedBonus={setSelectedBonus}
                     />
                     <MobileSlotButtons
@@ -89,6 +109,18 @@ export const MobileSlotComponent: React.FC = () => {
                         }
                         isOpen={isOpenBonuses}
                         onClose={() => setIsOpenBonuses(false)}
+                    />
+                    <Modal
+                        children={
+                            <AutoBonusModal
+                                slotData={slotData}
+                                setIsOpenAutoBonuses={setIsOpenAutoBonuses}
+                                setSelectedBonus={setSelectedBonus}
+                                setSlotData={setSlotData}
+                            />
+                        }
+                        isOpen={isOpenAutoBonuses}
+                        onClose={() => setIsOpenAutoBonuses(false)}
                     />
                     <img
                         src={MobileCharacter}

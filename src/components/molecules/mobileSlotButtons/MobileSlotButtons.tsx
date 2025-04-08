@@ -7,6 +7,7 @@ import { EActions } from 'utils/types/bet';
 import { changeBet } from 'utils/bets/calculator';
 import { useOutsideClick } from 'hooks/useOutSideClick';
 import { AutoSpinModal } from 'components/atoms/autoSpinModal/AutoSpinModal';
+import { Menu } from 'components/atoms/menu/Menu';
 
 interface ISlotButtons {
     slotData: ISlotData;
@@ -16,7 +17,10 @@ interface ISlotButtons {
 
 export const MobileSlotButtons: React.FC<ISlotButtons> = ({ slotData, setAction, setSlotData }) => {
     const [isOpenReply, setIsOpenReply] = React.useState<boolean>(false);
+    const [isOpenMenu, setIsOpenMenu] = React.useState<boolean>(false);
+
     const replyRef = React.useRef<HTMLDivElement>(null);
+    const menuRef = React.useRef<HTMLDivElement>(null);
 
     const onClickButton = (value: ESlotActions) => {
         if (value === ESlotActions.PLAY) {
@@ -31,6 +35,7 @@ export const MobileSlotButtons: React.FC<ISlotButtons> = ({ slotData, setAction,
         }
     };
 
+    useOutsideClick(menuRef, () => setIsOpenMenu(false));
     useOutsideClick(replyRef, () => setIsOpenReply(false));
 
     useEffect(() => {
@@ -41,14 +46,15 @@ export const MobileSlotButtons: React.FC<ISlotButtons> = ({ slotData, setAction,
 
     return (
         <div className={styles.mobileSlotButtons} ref={replyRef}>
-            <div className={styles.mobileSlotButtons_left}>
+            <div className={styles.mobileSlotButtons_left} ref={menuRef}>
                 <img src={AutoBonus} alt='autoBonus' />
                 <img
                     src={BuyBonus}
                     alt='buyBonus'
                     onClick={() => setAction(ESlotActions.BUY_BONUS)}
                 />
-                <img src={MenuButton} alt='menu' />
+                <img src={MenuButton} alt='menu' onClick={() => setIsOpenMenu((prev) => !prev)} />
+                {isOpenMenu && <Menu />}
             </div>
             <div className={styles.mobileSlotButtons_bottom}>
                 <div>
@@ -79,12 +85,21 @@ export const MobileSlotButtons: React.FC<ISlotButtons> = ({ slotData, setAction,
                         +
                     </button>
                 </div>
-                <button
-                    disabled={slotData.autoSpins !== 0}
-                    onClick={() => onClickButton(ESlotActions.PLAY)}
-                >
-                    <img src={Spin} alt='play' />
-                </button>
+                {slotData.autoSpins ? (
+                    <div
+                        className={styles.mobileSlotButtons_bets_count}
+                        onClick={() => setSlotData((prev) => ({ ...prev, autoSpins: 0 }))}
+                    >
+                        <p>{slotData.autoSpins}</p>
+                    </div>
+                ) : (
+                    <img
+                        src={Spin}
+                        alt='spin'
+                        className={styles.spin}
+                        onClick={() => onClickButton(ESlotActions.PLAY)}
+                    />
+                )}
             </div>
             <button
                 className={styles.mobileSlotButtons_reply}

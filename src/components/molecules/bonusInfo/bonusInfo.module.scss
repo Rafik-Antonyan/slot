@@ -11,7 +11,6 @@
     position: relative;
     z-index: 100;
     text-transform: uppercase;
-
    
     &>span{
         font-size: 34px;
@@ -34,7 +33,7 @@
         font-weight: 600;
         line-height: 28px;
         position: absolute;
-        bottom: -150px;  
+        bottom: -100px;  
     }
 
     &_desc{
