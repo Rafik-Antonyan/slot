@@ -22,6 +22,7 @@ export const Slot: React.FC = () => {
     const [slotData, setSlotData] = useState<ISlotData>({
         betValue: 1,
         balance: 4000,
+        autoSpins: 0,
     });
     const hasPausedOnce = useRef(false);
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -76,6 +77,8 @@ export const Slot: React.FC = () => {
                     <SlotView
                         action={action}
                         selectedBonus={selectedBonus}
+                        slotData={slotData}
+                        setSlotData={setSlotData}
                         isDoneInitialSpin={isDoneInitialSpin}
                         setSelectedBonus={setSelectedBonus}
                     />

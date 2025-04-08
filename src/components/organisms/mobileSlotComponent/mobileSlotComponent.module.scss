@@ -9,20 +9,19 @@
 
     & > img:first-child {
         width: 223px;
-        margin-top: 50px;
         object-fit: cover;
     }
 
     &_character {
         position: absolute;
-        bottom: 0;
+        bottom: -50px;
         right: 0;
     }
 }
 
 .slot_text {
     position: absolute;
-    bottom: 230px;
+    bottom: 180px;
     right: 100px;
     width: 300px;
     height: 180px;

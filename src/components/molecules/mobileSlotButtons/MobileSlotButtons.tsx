@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AutoBonus, BuyBonus, MenuButton, Spin, SpinAgain } from 'assets/png';
 import { ISlotData } from 'utils/types/slot';
 import { ESlotActions } from 'utils/types/slotActions';
 import styles from './mobileSlotButtons.module.scss';
 import { EActions } from 'utils/types/bet';
 import { changeBet } from 'utils/bets/calculator';
+import { useOutsideClick } from 'hooks/useOutSideClick';
+import { AutoSpinModal } from 'components/atoms/autoSpinModal/AutoSpinModal';
 
 interface ISlotButtons {
     slotData: ISlotData;
@@ -13,6 +15,9 @@ interface ISlotButtons {
 }
 
 export const MobileSlotButtons: React.FC<ISlotButtons> = ({ slotData, setAction, setSlotData }) => {
+    const [isOpenReply, setIsOpenReply] = React.useState<boolean>(false);
+    const replyRef = React.useRef<HTMLDivElement>(null);
+
     const onClickButton = (value: ESlotActions) => {
         if (value === ESlotActions.PLAY) {
             setAction(value);
@@ -26,8 +31,16 @@ export const MobileSlotButtons: React.FC<ISlotButtons> = ({ slotData, setAction,
         }
     };
 
+    useOutsideClick(replyRef, () => setIsOpenReply(false));
+
+    useEffect(() => {
+        if (slotData.autoSpins) {
+            setIsOpenReply(false);
+        }
+    }, [slotData.autoSpins]);
+
     return (
-        <div className={styles.mobileSlotButtons}>
+        <div className={styles.mobileSlotButtons} ref={replyRef}>
             <div className={styles.mobileSlotButtons_left}>
                 <img src={AutoBonus} alt='autoBonus' />
                 <img
@@ -53,14 +66,34 @@ export const MobileSlotButtons: React.FC<ISlotButtons> = ({ slotData, setAction,
             </div>
             <div className={styles.mobileSlotButtons_bets}>
                 <div>
-                    <button onClick={() => changeBet(EActions.DECREMENT, setSlotData)}>-</button>
-                    <button onClick={() => changeBet(EActions.INCREMENT, setSlotData)}>+</button>
+                    <button
+                        onClick={() => changeBet(EActions.DECREMENT, setSlotData)}
+                        disabled={slotData.autoSpins !== 0}
+                    >
+                        -
+                    </button>
+                    <button
+                        onClick={() => changeBet(EActions.INCREMENT, setSlotData)}
+                        disabled={slotData.autoSpins !== 0}
+                    >
+                        +
+                    </button>
                 </div>
-                <img src={Spin} alt='play' onClick={() => onClickButton(ESlotActions.PLAY)} />
+                <button
+                    disabled={slotData.autoSpins !== 0}
+                    onClick={() => onClickButton(ESlotActions.PLAY)}
+                >
+                    <img src={Spin} alt='play' />
+                </button>
             </div>
-            <div className={styles.mobileSlotButtons_reply}>
+            <button
+                className={styles.mobileSlotButtons_reply}
+                onClick={() => setIsOpenReply((prev) => !prev)}
+                disabled={slotData.autoSpins !== 0}
+            >
                 <img src={SpinAgain} alt='reply' />
-            </div>
+            </button>
+            {isOpenReply && <AutoSpinModal setSlotData={setSlotData} />}
         </div>
     );
 };

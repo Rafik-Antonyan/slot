@@ -7,10 +7,11 @@ import styles from './bet.module.scss';
 
 interface IBet {
     slotData: ISlotData;
+    disabled: boolean;
     setSlotData: React.Dispatch<React.SetStateAction<ISlotData>>;
 }
 
-export const Bet: React.FC<IBet> = ({ slotData, setSlotData}) => {
+export const Bet: React.FC<IBet> = ({ slotData, disabled, setSlotData }) => {
     return (
         <div className={styles.bet}>
             <div className={styles.bet_values}>
@@ -18,8 +19,18 @@ export const Bet: React.FC<IBet> = ({ slotData, setSlotData}) => {
                 <span>€{slotData.betValue}</span>
             </div>
             <div className={styles.bet_arrows}>
-                <img src={Arrow} alt='arrow' onClick={() => changeBet(EActions.INCREMENT, setSlotData)} />
-                <img src={Arrow} alt='arrow' onClick={() => changeBet(EActions.DECREMENT, setSlotData)} />
+                <button
+                    onClick={() => changeBet(EActions.INCREMENT, setSlotData)}
+                    disabled={disabled}
+                >
+                    <img src={Arrow} alt='arrow' />
+                </button>
+                <button
+                    onClick={() => changeBet(EActions.DECREMENT, setSlotData)}
+                    disabled={disabled}
+                >
+                    <img src={Arrow} alt='arrow' />
+                </button>
             </div>
         </div>
     );

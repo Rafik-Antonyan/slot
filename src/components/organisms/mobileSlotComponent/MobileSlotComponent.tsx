@@ -26,6 +26,7 @@ export const MobileSlotComponent: React.FC = () => {
     const [slotData, setSlotData] = useState<ISlotData>({
         betValue: 1,
         balance: 4000,
+        autoSpins: 0,
     });
 
     useEffect(() => {

@@ -1,22 +1,25 @@
-@import "./../../../styles/colors.scss";
+@import './../../../styles/colors.scss';
 @import '../../../styles/breakPoints.scss';
 
 .bet {
     display: flex;
     width: 273px;
     justify-content: space-between;
-    padding: 16px 40px;
+    padding: 16px 27px 16px 40px;
     border-radius: 80px;
-    background-color: #130e14c4;
+    background-color: #130e14;
+    height: 94px;
 
-    @include respond-to(2xl){
+    @include respond-to(2xl) {
         width: 223px;
-        padding: 12px 35px;
+        padding: 12px 22px 12px 35px;
+        height: 88px;
     }
 
-    @include respond-to(xl){
+    @include respond-to(xl) {
         width: 173px;
-        padding: 8px 30px;
+        padding: 8px 17px 8px 30px;
+        height: 82px;
     }
 
     &_values {
@@ -31,12 +34,12 @@
             line-height: 28px;
             font-weight: 600;
 
-            @include respond-to(2xl){
+            @include respond-to(2xl) {
                 font-size: 20px;
                 line-height: 24px;
             }
-        
-            @include respond-to(xl){
+
+            @include respond-to(xl) {
                 font-size: 18px;
                 line-height: 20px;
             }
@@ -47,38 +50,53 @@
             font-weight: bold;
             line-height: 28px;
 
-            @include respond-to(2xl){
+            @include respond-to(2xl) {
                 font-size: 28px;
                 line-height: 25px;
             }
-        
-            @include respond-to(xl){
+
+            @include respond-to(xl) {
                 font-size: 24px;
                 line-height: 22px;
             }
         }
     }
 
-    &_arrows{
+    &_arrows {
         display: flex;
         flex-direction: column;
         gap: 7px;
 
-        img{
+        button {
+            all: unset;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
             height: 36px !important;
             width: 52px !important;
 
-            @include respond-to(2xl){
+            &:disabled, &:disabled > *{
+                cursor: not-allowed !important;
+                filter: grayscale(1);
+            }
+
+            @include respond-to(2xl) {
                 height: 28px !important;
                 width: 40px !important;
             }
-        
-            @include respond-to(xl){
+
+            @include respond-to(xl) {
                 height: 20px !important;
                 width: 28px !important;
             }
 
-            &:last-child{
+            img {
+                height: 100% !important;
+                width: 100% !important;
+            }
+
+            &:last-child {
                 transform: rotate(180deg);
             }
         }

@@ -6,6 +6,7 @@ import { EBonuses, ESlotActions } from 'utils/types/slotActions';
 import HANDS_VIDEO from '../../../assets/mp4/hands.mp4';
 import STAR from '../../../assets/png/star.png';
 import styles from './slotView.module.scss';
+import { ISlotData } from 'utils/types/slot';
 
 interface ISlotView {
     action?: ESlotActions;
@@ -13,6 +14,8 @@ interface ISlotView {
     freeSpins?: number;
     extraSpins?: number;
     isDoneInitialSpin?: boolean;
+    slotData?: ISlotData;
+    setSlotData?: React.Dispatch<React.SetStateAction<ISlotData>>;
     setFreeSpins?: React.Dispatch<React.SetStateAction<number>>;
     setTotalWin?: React.Dispatch<React.SetStateAction<number>>;
     setExtraSpins?: React.Dispatch<React.SetStateAction<number>>;
@@ -34,6 +37,8 @@ export const SlotView: React.FC<ISlotView> = ({
     freeSpins,
     extraSpins,
     isDoneInitialSpin,
+    slotData,
+    setSlotData,
     setSelectedBonus,
     setFreeSpins,
     setTotalWin,
@@ -293,6 +298,19 @@ export const SlotView: React.FC<ISlotView> = ({
         }
     }, [action, isSpinning]);
 
+    useEffect(() => {
+        if (slotData && slotData.autoSpins > 0 && !isSpinning) {
+            freeSpinTimeoutRef.current = setTimeout(() => {
+                if (slotData.autoSpins <= 0) return;
+                handleSpin();
+                setSlotData!((prev) => ({
+                    ...prev,
+                    autoSpins: prev.autoSpins - 1,
+                }));
+            }, 1000);
+        }
+    }, [slotData?.autoSpins, isSpinning]);
+
     const setReelRef = (index: number) => (el: HTMLDivElement) => {
         reelsRef.current[index] = el;
     };
@@ -524,7 +542,7 @@ export const SlotView: React.FC<ISlotView> = ({
     }, [finalResult, isSpinning, selectedBonus]);
 
     useEffect(() => {
-        if (freeSpins === 0) {
+        if (freeSpins === 0 && selectedBonus === EBonuses.RAID) {
             setIsExtraRound(true);
             setLives(3);
         }

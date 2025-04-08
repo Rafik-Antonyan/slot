@@ -45,7 +45,7 @@ export const BonusModal: React.FC<IBonusModal> = ({ setIsOpenBonuses, setSelecte
                             <p>BET</p>
                             <div>
                                 <Button
-                                    disabled={bet === 0.2}
+                                    disabled={bet <= 0.3}
                                     children='-'
                                     onClick={() => setBet((prev) => prev - 0.2)}
                                 />
