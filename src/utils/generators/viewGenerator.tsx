@@ -59,6 +59,7 @@ const BONUS_ITEM_LIST: string[] = [
     Man2,
     Man3,
     Women,
+    Wild,
 ];
 
 const RAID_ITEM_LIST: string[] = [

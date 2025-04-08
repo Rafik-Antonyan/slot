@@ -488,7 +488,7 @@ export const SlotView: React.FC<ISlotView> = ({
     // Add this function to handle the progressive animation
     const animateExpansion = (column: number, startRow: number, startY: number) => {
         const slotItemHeight = isMobile ? 93 : 195;
-        const totalHeight = slotItemHeight * 4 - 60; // Total height of the slot view
+        const totalHeight = slotItemHeight * 4 - (isMobile ? 60 : 0); // Total height of the slot view
 
         // Calculate how much to expand upward and downward
         const expandUpward = startRow * (slotItemHeight - (isMobile ? 20 : 0));
