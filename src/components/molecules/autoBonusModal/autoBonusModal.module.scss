@@ -47,6 +47,11 @@
                 gap: 35px;
             }
 
+            @include respond-to(md) {
+                flex-direction: column;
+                width: 100%;
+            }
+
             & > div {
                 display: flex;
                 flex-direction: column;
@@ -67,9 +72,7 @@
 
                 @include respond-to(md) {
                     padding: 0 20px;
-                    &:nth-child(1),&:nth-child(3) {
-                        display: none;
-                    }
+                    width: 100%;
                 }
 
                 p {

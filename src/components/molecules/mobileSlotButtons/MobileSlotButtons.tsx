@@ -47,7 +47,11 @@ export const MobileSlotButtons: React.FC<ISlotButtons> = ({ slotData, setAction,
     return (
         <div className={styles.mobileSlotButtons} ref={replyRef}>
             <div className={styles.mobileSlotButtons_left} ref={menuRef}>
-                <img src={AutoBonus} alt='autoBonus' />
+                <img
+                    src={AutoBonus}
+                    alt='autoBonus'
+                    onClick={() => setAction(ESlotActions.AUTO_BONUS)}
+                />
                 <img
                     src={BuyBonus}
                     alt='buyBonus'
