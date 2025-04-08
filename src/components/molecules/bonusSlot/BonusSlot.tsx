@@ -18,7 +18,7 @@ export const BonusSlot: React.FC<IBonusSlot> = ({
     setSelectedBonus,
     setIsDoneInitialSpin,
 }) => {
-    const [freeSpins, setFreeSpins] = useState<number>(selectedBonus === EBonuses.RAID ? 300 : 10);
+    const [freeSpins, setFreeSpins] = useState<number>(selectedBonus === EBonuses.RAID ? 3 : 10);
     const [totalWin, setTotalWin] = useState<number>(0);
     const [isResult, setIsResult] = useState<boolean>(false);
     const [extraSpins, setExtraSpins] = useState<number>(3);

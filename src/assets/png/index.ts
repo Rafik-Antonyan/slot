@@ -42,8 +42,10 @@ import MobileRaid from './clean_raid_mobile.png';
 import BonusFeatures from './bonus_features.png';
 import MMMMobile from './mmm_mobile.png';
 import ExpanedWild from './expaned_wild.png';
+import MobileBGBlur from './mobile_bg_blur.png'
 
 export {
+    MobileBGBlur,
     ExpanedWild,
     BonusFeatures,
     MobileLoading,

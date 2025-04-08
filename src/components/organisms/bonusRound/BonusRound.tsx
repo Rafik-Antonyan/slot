@@ -20,7 +20,7 @@ interface IBonusRound {
 }
 
 export const BonusRound: React.FC<IBonusRound> = ({ selectedBonus, setSelectedBonus, setIsDoneInitialSpin }) => {
-    const [step, setStep] = useState<number>(2);
+    const [step, setStep] = useState<number>(0);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 

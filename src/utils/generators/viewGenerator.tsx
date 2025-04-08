@@ -64,7 +64,6 @@ const BONUS_ITEM_LIST: string[] = [
 const RAID_ITEM_LIST: string[] = [
     Wild,
     Miltiple,
-    
     GrayChip,
     GrayChip,
     GrayChip,

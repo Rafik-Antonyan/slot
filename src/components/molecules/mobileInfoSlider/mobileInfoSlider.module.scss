@@ -11,15 +11,14 @@
     }
 
     &_blur {
-        background-image: url('../../../assets/png/mobile_bg.png');
+        background-image: url('../../../assets/png/mobile_bg_blur.png');
         background-size: 100% 100%;
         position: absolute;
         z-index: -1;
-        top: -10%;
-        left: -10%;
-        width: 120%;
-        height: 120%;
-        filter: blur(10px);
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
     }
 
     span{
