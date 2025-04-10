@@ -10,6 +10,8 @@
         display: flex;
         align-items: center;
         height: 100%;
+        position: relative;
+
         img{
             height: 94px;
             width: 94px;
@@ -19,6 +21,11 @@
                 filter: grayscale(60%);
                 cursor: pointer;
             }
+        }
+
+        &>div:nth-child(2){
+            left: 0 !important;
+            bottom: 100px !important;
         }
     }
 

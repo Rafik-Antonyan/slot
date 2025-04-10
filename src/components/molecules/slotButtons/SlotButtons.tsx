@@ -88,7 +88,7 @@ export const SlotButtons: React.FC<ISlotButtons> = ({ setAction, slotData, setSl
                             src={Spin}
                             alt='spin'
                             className={styles.spin}
-                            onClick={() => onClickButton(ESlotActions.PLAY)}
+                            onClick={() => {onClickButton(ESlotActions.PLAY)}}
                         />
                     )}
                     <button

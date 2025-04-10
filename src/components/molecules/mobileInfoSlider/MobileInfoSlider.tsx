@@ -29,7 +29,7 @@ export const MobileInfoSlider: React.FC<IMobileInfoSlider> = ({ setStep }) => {
                 slidesPerView={1}
                 loop
                 autoplay={{
-                    delay: 1000,
+                    delay: 2000,
                     disableOnInteraction: false,
                 }}
                 className={styles.swiper}

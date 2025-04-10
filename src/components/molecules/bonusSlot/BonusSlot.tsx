@@ -54,6 +54,9 @@ export const BonusSlot: React.FC<IBonusSlot> = ({
                         isAutoBonus: false,
                     }));
                 }, 3300);
+                setTimeout(() => {
+                    setIsDoneInitialSpin && setIsDoneInitialSpin(false);
+                }, 8400);
             } else if (selectedBonus === EBonuses.INTERROGATION) {
                 setTimeout(() => {
                     setIsResult(true);
@@ -63,6 +66,9 @@ export const BonusSlot: React.FC<IBonusSlot> = ({
                         isAutoBonus: false,
                     }));
                 }, 5000);
+                setTimeout(() => {
+                    setIsDoneInitialSpin && setIsDoneInitialSpin(false);
+                }, 10100);
             }
         }
         if (!extraSpins && selectedBonus === EBonuses.RAID) {
@@ -82,14 +88,17 @@ export const BonusSlot: React.FC<IBonusSlot> = ({
             setTimeout(() => {
                 setIsDoneInitialSpin && setIsDoneInitialSpin(false);
             }, 3000);
+            setTimeout(() => {
+                setIsDoneInitialSpin && setIsDoneInitialSpin(false);
+            }, 8100);
         }
     }, [isResult]);
 
     useEffect(() => {
-        if(slotData.isAutoBonus){
-            setFreeSpins(getFreeSpins())
+        if (slotData.isAutoBonus) {
+            setFreeSpins(getFreeSpins());
         }
-    },[slotData.isAutoBonus])
+    }, [slotData.isAutoBonus]);
 
     return (
         <div className={styles.bonusSlot}>

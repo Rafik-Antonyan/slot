@@ -47,8 +47,10 @@ import CleanI from './clean_I.png';
 import MusicIcon from './music.png';
 import SoundIcon from './sound.png';
 import InfoIcon from './info.png';
+import CloseIcon from './close.png';
 
 export {
+    CloseIcon,
     MusicIcon,
     SoundIcon,
     InfoIcon,

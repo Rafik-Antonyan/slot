@@ -292,6 +292,11 @@
     animation: pulse 1s infinite alternate;
     height: 60px;
     width: 60px;
+
+    @include respond-to(md) {
+        height: 40px;
+        width: 40px;
+    }
 }
 
 @keyframes pulse {
@@ -307,6 +312,11 @@
     animation: raidpulse 1s infinite alternate;
     height: 60px;
     width: 60px;
+
+    @include respond-to(md) {
+        height: 40px;
+        width: 40px;
+    }
 }
 
 @keyframes raidpulse {
@@ -323,8 +333,8 @@
 
     @keyframes pulse-small {
         100% {
-            top: -100px;
-            left: 35px;
+            top: -95px;
+            left: 40px;
         }
     }
 
@@ -334,8 +344,8 @@
 
     @keyframes raidpulse-small {
         100% {
-            top: -100px;
-            left: 78%;
+            top: -95px;
+            left: 80%;
         }
     }
 }

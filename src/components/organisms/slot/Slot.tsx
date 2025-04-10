@@ -93,7 +93,7 @@ export const Slot: React.FC = () => {
                 />
             ) : (
                 <>
-                    <video ref={videoRef} className={styles.slot_video}>
+                    <video ref={videoRef} className={styles.slot_video} muted>
                         <source src={myVideo} type='video/mp4' />
                         Your browser does not support the video tag.
                     </video>

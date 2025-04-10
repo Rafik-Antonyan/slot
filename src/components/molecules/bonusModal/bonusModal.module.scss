@@ -228,14 +228,14 @@
 
                 img {
                     width: 100%;
-                    height: 290px;
+                    height: 320px;
 
                     @include respond-to(2xl) {
-                        height: 270px;
+                        height: 300px;
                     }
 
                     @include respond-to(xl) {
-                        height: 250px;
+                        height: 280px;
                     }
                 }
             }
@@ -272,6 +272,7 @@
                 height: 100%;
                 img {
                     width: 70%;
+                    height: 300px;
                     object-fit: cover;
                 }
                 & > .bonusModal_confirm_text {

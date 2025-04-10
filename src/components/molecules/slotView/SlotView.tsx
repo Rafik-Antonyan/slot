@@ -5,8 +5,8 @@ import { generateInitialBonusview, viewGenerator } from 'utils/generators/viewGe
 import { EBonuses, ESlotActions } from 'utils/types/slotActions';
 import HANDS_VIDEO from '../../../assets/mp4/hands.mp4';
 import STAR from '../../../assets/png/star.png';
-import styles from './slotView.module.scss';
 import { ISlotData } from 'utils/types/slot';
+import styles from './slotView.module.scss';
 
 interface ISlotView {
     action?: ESlotActions;

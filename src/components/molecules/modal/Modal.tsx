@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
+import { CloseIcon } from 'assets/png';
 import styles from './modal.module.scss'
 
 interface IModal {
@@ -13,6 +14,7 @@ export const Modal: React.FC<IModal> = ({ isOpen, onClose, children }) => {
 
   return ReactDOM.createPortal(
     <div className={styles.modal} onClick={onClose}>
+      <img src={CloseIcon} alt="close" onClick={onClose}/>
       <div onClick={(e) => e.stopPropagation()}>
         {children}
       </div>

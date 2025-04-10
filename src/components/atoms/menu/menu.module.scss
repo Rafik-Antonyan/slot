@@ -11,11 +11,14 @@
     gap: 35px;
     padding: 24px 14px;
     border-radius: 6px;
+    z-index: 100;
 
     @include respond-to(md) {
         left: 0;
-        z-index: 100;
         bottom: 60px;
+        width: 200px;
+        padding: 20px 10px;
+        gap: 20px;
     }
 
     &>div{
@@ -33,6 +36,18 @@
             font-size: 24px;
             line-height: 28px;
             color: white;
+        }
+
+        @include respond-to(md) {
+            &>img{
+                width: 20px;
+                height: 20px;
+            }
+
+            &>p{
+                font-size: 18px;
+                line-height: 22px;
+            }
         }
     }
 }

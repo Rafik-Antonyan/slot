@@ -17,6 +17,12 @@
             height: 54px;
             margin-left: -5px;
         }
+
+        &:first-child{
+            &>div{
+                bottom: 130px !important;
+            }
+        }
     }
 
     .infoBlock{

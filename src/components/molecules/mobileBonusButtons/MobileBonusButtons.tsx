@@ -1,6 +1,8 @@
 import React from 'react';
 import { MenuButton } from 'assets/png';
-import styles from './mobileBonusButtons.module.scss'
+import { useOutsideClick } from 'hooks/useOutSideClick';
+import { Menu } from 'components/atoms/menu/Menu';
+import styles from './mobileBonusButtons.module.scss';
 
 interface IMobileBonusButtons {
     freeSpins: number;
@@ -13,10 +15,15 @@ export const MobileBonusButtons: React.FC<IMobileBonusButtons> = ({
     totalWin,
     extraSpins,
 }) => {
+    const [isOpenMenu, setIsOpenMenu] = React.useState<boolean>(false);
+    const menuRef = React.useRef<HTMLDivElement>(null);
+    useOutsideClick(menuRef, () => setIsOpenMenu(false));
+
     return (
         <div className={styles.mobileBonusButtons}>
-            <div>
-                <img src={MenuButton} alt='menu' />
+            <div ref={menuRef}>
+                <img src={MenuButton} alt='menu' onClick={() => setIsOpenMenu((prev) => !prev)} />
+                {isOpenMenu && <Menu />}
                 <div className={styles.infoBlock}>
                     <p>TOTAL WIN</p>
                     <span>${totalWin.toFixed(2)}</span>
